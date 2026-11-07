@@ -6,7 +6,7 @@
 
 This repository holds the homepage for **KissSDD**, a simple approach to Specification-Driven Development with AI coding agents such as Claude Code or OpenCode. It is a static website, published with GitHub Pages. There is no application code and no build step.
 
-![KissSDD process](img/sdd-kiss-en.png)
+![KissSDD process](docs/img/sdd-kiss-en.png)
 
 ## The idea
 
@@ -24,26 +24,28 @@ Then iterate for continuous improvement. The full explanation, model recommendat
 
 ## Repository contents
 
+The whole website lives in `docs/`:
+
 | Path | What it is |
 |---|---|
-| `index.html` | The whole website: one self-contained page, English/German switch, light/dark mode |
-| `img/sdd-kiss-en.png`, `img/sdd-kiss-de.png` | Process infographics (English / German) |
-| `img/og-en.jpg` | 1200×630 link preview image for LinkedIn, WhatsApp etc. |
-| `img/icons/`, `favicon.ico`, `site.webmanifest` | Browser and home-screen icons |
-| `.nojekyll` | Tells GitHub Pages to serve the files as they are |
+| `docs/index.html` | The whole website: one self-contained page, English/German switch, light/dark mode |
+| `docs/img/sdd-kiss-en.png`, `docs/img/sdd-kiss-de.png` | Process infographics (English / German) |
+| `docs/img/og-en.jpg` | 1200×630 link preview image for LinkedIn, WhatsApp etc. |
+| `docs/img/icons/`, `docs/favicon.ico`, `docs/site.webmanifest` | Browser and home-screen icons |
+| `docs/.nojekyll` | Tells GitHub Pages to serve the files as they are |
 
 ## Run locally
 
-Open `index.html` in a browser, or serve the folder:
+Open `docs/index.html` in a browser, or serve the folder:
 
 ```sh
-python3 -m http.server 8000
+python3 -m http.server 8000 --directory docs
 # → http://localhost:8000
 ```
 
 ## Deployment
 
-GitHub Pages serves the root of the `main` branch. Every push to `main` updates the website.
+GitHub Pages serves the `docs/` folder of the `main` branch. Every push to `main` updates the website.
 
 ## Author
 
