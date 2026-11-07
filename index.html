@@ -140,6 +140,18 @@
   .panel ul { margin: 0; padding-left: 20px; color: var(--muted); }
   .panel li { margin: 6px 0; }
 
+  .models { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .model { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 8px; }
+  .model .stepref { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+  .model h3 { margin: 0; font-size: 18px; }
+  .model .pick { margin-top: auto; padding-top: 8px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .model .pick span { font-size: 13px; font-weight: 700; padding: 4px 10px; border-radius: 999px; background: var(--tint); color: var(--navy); }
+  .model .pick span.top { background: var(--navy); color: #fff; }
+  :root[data-theme="dark"] .model .pick span.top { color: #0c1424; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .model .pick span.top { color: #0c1424; } }
+  .model .pick span.fav { background: var(--green-soft); color: var(--green); }
+  .model p { margin: 0; color: var(--muted); font-size: 15px; }
+
   footer { border-top: 1px solid var(--line); padding: 32px 0 48px; color: var(--muted); font-size: 15px; }
   footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; }
 
@@ -149,10 +161,10 @@
   @media (max-width: 860px) {
     nav.links { display: none; }
     .why, .next { grid-template-columns: 1fr; }
-    .pillars { grid-template-columns: 1fr 1fr; }
+    .pillars, .models { grid-template-columns: 1fr 1fr; }
   }
   @media (max-width: 480px) {
-    .pillars { grid-template-columns: 1fr; }
+    .pillars, .models { grid-template-columns: 1fr; }
     .hero { padding-top: 48px; }
   }
 </style>
@@ -166,6 +178,7 @@
       <a href="#why" data-i18n="nav.why">Why KISS</a>
       <a href="#process" data-i18n="nav.process">Process</a>
       <a href="#steps" data-i18n="nav.steps">7 Steps</a>
+      <a href="#models" data-i18n="nav.models">Models</a>
       <a href="#next" data-i18n="nav.next">Next Steps</a>
     </nav>
     <div class="lang" role="group" aria-label="Language">
@@ -298,6 +311,39 @@
     </div>
   </section>
 
+  <section id="models">
+    <div class="wrap">
+      <h2 data-i18n="models.title">Pick the right model for each step</h2>
+      <p class="sub" data-i18n="models.sub">Results depend on the LLM you use. Spend the best “brain” where thinking matters most — on the specification, the plan and the reviews.</p>
+      <div class="models">
+        <div class="model">
+          <span class="stepref" data-i18n="models.1.ref">Step 1</span>
+          <h3 data-i18n="models.1.t">Refine the User Story</h3>
+          <p data-i18n="models.1.d">A top model points out aspects you missed — such as security issues — and asks whether it should add acceptance criteria.</p>
+          <div class="pick"><span class="top">Opus 5.5</span></div>
+        </div>
+        <div class="model">
+          <span class="stepref" data-i18n="models.3.ref">Step 3</span>
+          <h3 data-i18n="models.3.t">Prepare the implementation plan</h3>
+          <p data-i18n="models.3.d">Use the best LLM brain available. A strong plan makes everything after it easier.</p>
+          <div class="pick"><span class="top">Opus 5.5</span></div>
+        </div>
+        <div class="model">
+          <span class="stepref" data-i18n="models.5.ref">Step 5</span>
+          <h3 data-i18n="models.5.t">Generate the implementation</h3>
+          <p data-i18n="models.5.d">With a good plan in place, a fast mid-tier model is sufficient. ★ GPT Sol 6.1 is my personal favourite.</p>
+          <div class="pick"><span>Sonnet 5.5</span><span class="fav">GPT Sol 6.1 ★</span></div>
+        </div>
+        <div class="model">
+          <span class="stepref" data-i18n="models.rev.ref">Steps 4 &amp; 6</span>
+          <h3 data-i18n="models.rev.t">Code reviews</h3>
+          <p data-i18n="models.rev.d">Always use a top-tier model for reviews.</p>
+          <div class="pick"><span class="top">Opus 5.5</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section id="next">
     <div class="wrap">
       <h2 data-i18n="next.title">Once the basics feel natural</h2>
@@ -378,6 +424,21 @@
     "p3.d": "Die KI plant, implementiert und testet – geführt von deinen Spezifikationen.",
     "p4.t": "Menschen im Mittelpunkt",
     "p4.d": "Der Mensch setzt das Ziel und gibt jede finale Freigabe.",
+    "nav.models": "Modelle",
+    "models.title": "Das richtige Modell für jeden Schritt",
+    "models.sub": "Die Ergebnisse hängen vom eingesetzten LLM ab. Setze das beste „Gehirn“ dort ein, wo Denken am meisten zählt – bei der Spezifikation, dem Plan und den Reviews.",
+    "models.1.ref": "Schritt 1",
+    "models.1.t": "User Story verfeinern",
+    "models.1.d": "Ein Top-Modell weist auf Aspekte hin, die du übersehen hast – etwa Sicherheitsthemen – und fragt, ob es Akzeptanzkriterien ergänzen soll.",
+    "models.3.ref": "Schritt 3",
+    "models.3.t": "Implementierungsplan erstellen",
+    "models.3.d": "Nutze das beste verfügbare LLM. Ein starker Plan macht alles Weitere einfacher.",
+    "models.5.ref": "Schritt 5",
+    "models.5.t": "Implementierung generieren",
+    "models.5.d": "Mit einem guten Plan reicht ein schnelles Mittelklasse-Modell aus. ★ GPT Sol 6.1 ist mein persönlicher Favorit.",
+    "models.rev.ref": "Schritte 4 & 6",
+    "models.rev.t": "Code-Reviews",
+    "models.rev.d": "Für Reviews immer ein Top-Modell verwenden.",
     "next.title": "Wenn die Grundlagen sitzen",
     "next.sub": "Beherrsche zuerst den einfachen Ansatz. Dann baue ihn Schritt für Schritt aus.",
     "next.a.t": "Der nächste Level",
