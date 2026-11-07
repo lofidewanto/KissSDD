@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KISS SDD</title>
+<meta name="description" content="KISS SDD – Specification-Driven Development with AI, the simple way. Seven steps from idea to done.">
+<style>
+  :root {
+    --navy: #0f3f86;
+    --navy-deep: #0a2c63;
+    --blue: #1f6fe0;
+    --green: #3fae3a;
+    --green-soft: #e8f6e6;
+    --bg: #f5f8fd;
+    --card: #ffffff;
+    --text: #13213a;
+    --muted: #55627a;
+    --line: #dbe4f2;
+    --tint: #eaf1fc;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --navy: #8fb6ff; --navy-deep: #c9dcff; --blue: #6aa3ff; --green: #6fd067; --green-soft: #17301a;
+      --bg: #0c1424; --card: #131e33; --text: #e6ecf7; --muted: #9aa8c2; --line: #24324d; --tint: #16233d;
+    }
+  }
+  :root[data-theme="dark"] {
+    --navy: #8fb6ff; --navy-deep: #c9dcff; --blue: #6aa3ff; --green: #6fd067; --green-soft: #17301a;
+    --bg: #0c1424; --card: #131e33; --text: #e6ecf7; --muted: #9aa8c2; --line: #24324d; --tint: #16233d;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 17px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, Helvetica, Arial, sans-serif;
+  }
+  a { color: var(--blue); }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
+
+  header.top {
+    position: sticky; top: 0; z-index: 10;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(8px); border-bottom: 1px solid var(--line);
+  }
+  header.top .wrap { display: flex; align-items: center; justify-content: space-between; height: 60px; gap: 12px; }
+  .brand { font-weight: 800; font-size: 20px; color: var(--navy-deep); text-decoration: none; letter-spacing: -.01em; }
+  .brand span { color: var(--green); }
+  nav.links { display: flex; gap: 20px; font-size: 15px; }
+  nav.links a { color: var(--muted); text-decoration: none; }
+  nav.links a:hover { color: var(--text); }
+  .lang { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; background: var(--card); }
+  .lang button {
+    border: 0; background: transparent; color: var(--muted); font: inherit; font-size: 14px; font-weight: 600;
+    padding: 6px 14px; cursor: pointer;
+  }
+  .lang button[aria-pressed="true"] { background: var(--navy); color: #fff; }
+  :root[data-theme="dark"] .lang button[aria-pressed="true"] { color: #0c1424; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .lang button[aria-pressed="true"] { color: #0c1424; } }
+
+  .hero { padding: 72px 0 40px; }
+  .eyebrow { display: inline-block; font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--green); margin-bottom: 14px; }
+  h1 { font-size: clamp(36px, 6vw, 60px); line-height: 1.05; margin: 0 0 18px; letter-spacing: -.025em; color: var(--navy-deep); }
+  h1 em { font-style: normal; color: var(--green); }
+  .lead { font-size: clamp(18px, 2.2vw, 21px); color: var(--muted); max-width: 720px; margin: 0 0 28px; }
+  .kiss { font-style: italic; font-weight: 700; color: var(--navy); }
+  .cta { display: flex; flex-wrap: wrap; gap: 12px; }
+  .btn { display: inline-block; padding: 12px 22px; border-radius: 10px; font-weight: 700; text-decoration: none; font-size: 16px; }
+  .btn.primary { background: var(--navy); color: #fff; }
+  :root[data-theme="dark"] .btn.primary { color: #0c1424; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .btn.primary { color: #0c1424; } }
+  .btn.ghost { border: 1px solid var(--line); color: var(--text); background: var(--card); }
+
+  section { padding: 56px 0; }
+  h2 { font-size: clamp(26px, 3.5vw, 36px); margin: 0 0 10px; letter-spacing: -.015em; color: var(--navy-deep); }
+  .sub { color: var(--muted); margin: 0 0 32px; max-width: 760px; }
+
+  figure.info { margin: 0; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 12px; box-shadow: 0 10px 30px rgba(15,63,134,.08); }
+  figure.info a { display: block; }
+  figure.info img { width: 100%; height: auto; display: block; border-radius: 10px; }
+  figure.info figcaption { font-size: 14px; color: var(--muted); padding: 10px 6px 2px; }
+
+  .why { display: grid; grid-template-columns: 1.2fr 1fr; gap: 32px; align-items: start; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 0; padding: 0; list-style: none; }
+  .chips li { font-size: 14px; padding: 5px 12px; border-radius: 999px; background: var(--tint); color: var(--muted); text-decoration: line-through; text-decoration-color: color-mix(in srgb, var(--muted) 60%, transparent); }
+  .callout { background: var(--green-soft); border-left: 4px solid var(--green); border-radius: 12px; padding: 20px 22px; }
+  .callout p { margin: 0; }
+  .callout strong { color: var(--text); }
+
+  ol.steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+  ol.steps li { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 20px; position: relative; }
+  .num { display: inline-grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--blue); color: #fff; font-weight: 800; font-size: 16px; }
+  .who { float: right; font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 999px; background: var(--tint); color: var(--navy); margin-top: 6px; }
+  .who.ai { background: var(--green-soft); color: var(--green); }
+  ol.steps h3 { margin: 14px 0 6px; font-size: 18px; line-height: 1.3; }
+  ol.steps p { margin: 0; color: var(--muted); font-size: 15px; }
+  ol.steps code { font-size: 13px; background: var(--tint); padding: 1px 6px; border-radius: 5px; }
+  .loop { margin-top: 18px; display: flex; align-items: center; gap: 10px; color: var(--green); font-weight: 700; }
+
+  .pillars { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .pillar { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 22px; }
+  .pillar svg { width: 30px; height: 30px; color: var(--navy); }
+  .pillar h3 { margin: 12px 0 6px; font-size: 18px; }
+  .pillar p { margin: 0; color: var(--muted); font-size: 15px; }
+
+  .next { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .panel { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 24px; }
+  .panel h3 { margin: 0 0 12px; font-size: 19px; }
+  .panel ul { margin: 0; padding-left: 20px; color: var(--muted); }
+  .panel li { margin: 6px 0; }
+
+  footer { border-top: 1px solid var(--line); padding: 32px 0 48px; color: var(--muted); font-size: 15px; }
+  footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; }
+
+  [data-lang-only] { display: none; }
+  html[lang="en"] [data-lang-only="en"], html[lang="de"] [data-lang-only="de"] { display: revert; }
+
+  @media (max-width: 860px) {
+    nav.links { display: none; }
+    .why, .next { grid-template-columns: 1fr; }
+    .pillars { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 480px) {
+    .pillars { grid-template-columns: 1fr; }
+    .hero { padding-top: 48px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#">SDD-<span>KISS</span></a>
+    <nav class="links">
+      <a href="#why" data-i18n="nav.why">Why KISS</a>
+      <a href="#process" data-i18n="nav.process">Process</a>
+      <a href="#steps" data-i18n="nav.steps">7 Steps</a>
+      <a href="#next" data-i18n="nav.next">Next Steps</a>
+    </nav>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" data-set-lang="en" aria-pressed="true">EN</button>
+      <button type="button" data-set-lang="de" aria-pressed="false">DE</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <span class="eyebrow" data-i18n="hero.eyebrow">Specification-Driven Development with AI</span>
+      <h1 data-i18n-html="hero.title">Spec-Driven Development,<br><em>the simple way.</em></h1>
+      <p class="lead" data-i18n-html="hero.lead">Start with a well-thought-out User Story, let AI plan and build, and keep humans in charge of every approval. Seven steps from idea to done — <span class="kiss">Keep It Simple, Stupid!</span></p>
+      <div class="cta">
+        <a class="btn primary" href="#process" data-i18n="hero.cta1">See the process</a>
+        <a class="btn ghost" href="#steps" data-i18n="hero.cta2">Read the 7 steps</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="why">
+    <div class="wrap why">
+      <div>
+        <h2 data-i18n="why.title">Why KISS?</h2>
+        <p data-i18n="why.p1">Many developers struggle with SDD because there are so many frameworks to choose from. Each brings its own commands, templates and ceremony.</p>
+        <ul class="chips" aria-label="SDD frameworks">
+          <li>AI Unified Process</li>
+          <li>GitHub Spec Kit</li>
+          <li>OpenSpec</li>
+          <li>BMAD</li>
+          <li>Get Shit Done</li>
+        </ul>
+      </div>
+      <div class="callout">
+        <p data-i18n-html="why.callout"><strong>If you are new to SDD, don't start with a framework.</strong> Start simple: a clear functional specification, a clear technical specification, an AI agent like Claude Code or OpenCode — and a human who reviews and approves.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="process">
+    <div class="wrap">
+      <h2 data-i18n="process.title">The process at a glance</h2>
+      <p class="sub" data-i18n="process.sub">Simple • Smart • AI-Driven • From Idea to Done</p>
+      <figure class="info">
+        <a id="info-link" href="img/sdd-kiss-en.png" target="_blank" rel="noopener">
+          <img id="info-img" src="img/sdd-kiss-en.png" width="1536" height="1024"
+               alt="SDD-KISS process infographic: seven steps from defining functional specifications to completion, with an iteration loop.">
+        </a>
+        <figcaption data-i18n="process.caption">Click the image to open it in full size.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section id="steps">
+    <div class="wrap">
+      <h2 data-i18n="steps.title">Seven steps from idea to done</h2>
+      <p class="sub" data-i18n="steps.sub">Humans and AI work side by side. AI does the heavy lifting; humans define the goal and make the final call. Steps 1 and 2 can run in parallel.</p>
+      <ol class="steps">
+        <li>
+          <span class="num">1</span><span class="who" data-i18n="who.both">Human + AI</span>
+          <h3 data-i18n="s1.t">Define Functional Specifications</h3>
+          <p data-i18n-html="s1.d">Write a User Story with acceptance criteria in a GitHub Issue: <em>“As a &lt;role&gt; I want &lt;feature&gt;, to achieve &lt;benefit&gt;.”</em> Add business process, business rules, domain model and data model.</p>
+        </li>
+        <li>
+          <span class="num">2</span><span class="who" data-i18n="who.both">Human + AI</span>
+          <h3 data-i18n="s2.t">Define Technical Specifications</h3>
+          <p data-i18n="s2.d">Global technical specifications shared by all stories — e.g. Java, Spring Boot, Angular, architecture and coding standards. Can be done in parallel with step 1.</p>
+        </li>
+        <li>
+          <span class="num">3</span><span class="who ai" data-i18n="who.ai">AI</span>
+          <h3 data-i18n="s3.t">Generate Implementation Plan</h3>
+          <p data-i18n-html="s3.d">Claude Code and/or OpenCode create a concrete plan based on the user story (functional) and the technical specs (technical &amp; non-functional). Saved in <code>docs/user-story-plan/…</code></p>
+        </li>
+        <li>
+          <span class="num">4</span><span class="who" data-i18n="who.both">Human + AI</span>
+          <h3 data-i18n="s4.t">Review and Approve</h3>
+          <p data-i18n="s4.d">The plan is reviewed by one or more LLMs and finally approved by a human.</p>
+        </li>
+        <li>
+          <span class="num">5</span><span class="who ai" data-i18n="who.ai">AI</span>
+          <h3 data-i18n="s5.t">Implement and Test</h3>
+          <p data-i18n="s5.d">AI implements the solution, runs the tests automatically and analyses the results.</p>
+        </li>
+        <li>
+          <span class="num">6</span><span class="who" data-i18n="who.both">Human + AI</span>
+          <h3 data-i18n="s6.t">Review and Approve Again</h3>
+          <p data-i18n="s6.d">Another review of the implementation by one or more LLMs, with final approval by a human.</p>
+        </li>
+        <li>
+          <span class="num">7</span><span class="who" data-i18n="who.both">Human + AI</span>
+          <h3 data-i18n="s7.t">Complete</h3>
+          <p data-i18n="s7.d">Commit the changes, push to the repository and close the GitHub Issue.</p>
+        </li>
+      </ol>
+      <div class="loop">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg>
+        <span data-i18n="steps.loop">Iterate — for continuous improvement.</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2 data-i18n="pillars.title">What you get</h2>
+      <p class="sub" data-i18n="pillars.sub">Four promises behind SDD-KISS.</p>
+      <div class="pillars">
+        <div class="pillar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 16.5c-1.5 1.3-2 5-2 5s3.7-.5 5-2c.7-.8.7-2.1-.1-2.9a2.2 2.2 0 0 0-2.9-.1z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.9A12.9 12.9 0 0 1 22 2c0 2.7-.8 7.5-6 11a22.4 22.4 0 0 1-4 2z"/></svg>
+          <h3 data-i18n="p1.t">Get to Value Faster</h3>
+          <p data-i18n="p1.d">No framework to learn first. A good user story is enough to start.</p>
+        </div>
+        <div class="pillar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+          <h3 data-i18n="p2.t">Highest Quality</h3>
+          <p data-i18n="p2.d">Two review gates with multiple LLMs, plus automated tests.</p>
+        </div>
+        <div class="pillar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2"/><path d="M9 9h6v6H9zM9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/></svg>
+          <h3 data-i18n="p3.t">Empower AI as Enabler</h3>
+          <p data-i18n="p3.d">AI plans, implements and tests — guided by your specifications.</p>
+        </div>
+        <div class="pillar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><path d="M16 3.1a4 4 0 0 1 0 7.8M21 21v-2a4 4 0 0 0-3-3.9"/></svg>
+          <h3 data-i18n="p4.t">Focus on People</h3>
+          <p data-i18n="p4.d">Humans define the goal and give every final approval.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="next">
+    <div class="wrap">
+      <h2 data-i18n="next.title">Once the basics feel natural</h2>
+      <p class="sub" data-i18n="next.sub">Master the simple approach first. Then grow it step by step.</p>
+      <div class="next">
+        <div class="panel">
+          <h3 data-i18n="next.a.t">Level up</h3>
+          <ul>
+            <li data-i18n="next.a.1">Make user stories traceable — both new and updated ones.</li>
+            <li data-i18n="next.a.2">Define tests in more detail, especially end-to-end (E2E) tests.</li>
+            <li data-i18n="next.a.3">Keep tests unchanged, so they can reliably check the implementation.</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3 data-i18n="next.b.t">Tips from the community</h3>
+          <ul>
+            <li data-i18n="next.b.1">Write limits and constraints into the specification (e.g. maximum file size). Only what the spec names gets hardened.</li>
+            <li data-i18n="next.b.2">State explicitly what must not change.</li>
+            <li data-i18n="next.b.3">Keep tests off-limits for the agent, so it can’t edit them until they pass.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span data-i18n-html="foot.by">SDD-KISS by <a href="https://de.linkedin.com/in/dr-lofi-dewanto" target="_blank" rel="noopener">Dr. Lofi Dewanto</a></span>
+    <a href="https://lnkd.in/p/exjrYTQB" target="_blank" rel="noopener" data-i18n="foot.post">Read the original LinkedIn post</a>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var de = {
+    "nav.why": "Warum KISS",
+    "nav.process": "Prozess",
+    "nav.steps": "7 Schritte",
+    "nav.next": "Nächste Schritte",
+    "hero.eyebrow": "Spezifikationsgetriebene Entwicklung mit KI",
+    "hero.title": "Spec-Driven Development,<br><em>ganz einfach.</em>",
+    "hero.lead": "Starte mit einer gut durchdachten User Story, lass die KI planen und umsetzen – und behalte als Mensch jede Freigabe in der Hand. Sieben Schritte von der Idee bis zum Abschluss — <span class=\"kiss\">Keep It Simple, Stupid!</span>",
+    "hero.cta1": "Zum Prozess",
+    "hero.cta2": "Die 7 Schritte lesen",
+    "why.title": "Warum KISS?",
+    "why.p1": "Viele Entwickler tun sich mit SDD schwer, weil es so viele Frameworks gibt. Jedes bringt eigene Befehle, Vorlagen und Zeremonien mit.",
+    "why.callout": "<strong>Wenn du neu bei SDD bist, starte nicht mit einem Framework.</strong> Fang einfach an: eine klare funktionale Spezifikation, eine klare technische Spezifikation, ein KI-Agent wie Claude Code oder OpenCode – und ein Mensch, der prüft und freigibt.",
+    "process.title": "Der Prozess auf einen Blick",
+    "process.sub": "Simple • Smart • AI-Driven • From Idea to Done",
+    "process.caption": "Klicke auf das Bild, um es in voller Größe zu öffnen.",
+    "steps.title": "Sieben Schritte von der Idee bis zum Abschluss",
+    "steps.sub": "Mensch und KI arbeiten Hand in Hand. Die KI übernimmt die Hauptarbeit; der Mensch setzt das Ziel und hat das letzte Wort. Schritt 1 und 2 können parallel laufen.",
+    "who.both": "Mensch + KI",
+    "who.ai": "KI",
+    "s1.t": "Funktionale Spezifikationen definieren",
+    "s1.d": "Schreibe eine User Story mit Akzeptanzkriterien in ein GitHub-Issue: <em>„Als &lt;Rolle&gt; möchte ich &lt;Feature&gt;, um &lt;Nutzen&gt; zu erreichen.“</em> Ergänze Geschäftsprozess, Geschäftsregeln, Entitätsmodell und Datenmodell.",
+    "s2.t": "Technische Spezifikationen",
+    "s2.d": "Globale technische Spezifikationen für alle Stories – z. B. Java, Spring Boot, Angular, Architektur und Entwicklungsstandards. Kann parallel zu Schritt 1 erfolgen.",
+    "s3.t": "Implementierungsplan generieren",
+    "s3.d": "Claude Code und/oder OpenCode erstellen einen konkreten Plan auf Basis der User Story (funktional) und der technischen Spezifikationen (technisch &amp; nicht funktional). Gespeichert in <code>docs/user-story-plan/…</code>",
+    "s4.t": "Review und Freigabe",
+    "s4.d": "Der Plan wird von einem oder mehreren LLMs geprüft und anschließend von einem Menschen freigegeben.",
+    "s5.t": "Implementierung und Tests",
+    "s5.d": "Die KI implementiert die Lösung und generiert Tests, führt sie automatisch aus und analysiert die Ergebnisse.",
+    "s6.t": "Erneutes Review und Freigabe",
+    "s6.d": "Erneute Prüfung der Umsetzung durch ein oder mehrere LLMs und abschließende Freigabe durch einen Menschen.",
+    "s7.t": "Abschluss",
+    "s7.d": "Commit erstellen, Änderungen pushen und das GitHub-Issue schließen.",
+    "steps.loop": "Iterativ – für kontinuierliche Verbesserung.",
+    "pillars.title": "Was du bekommst",
+    "pillars.sub": "Vier Versprechen hinter SDD-KISS.",
+    "p1.t": "Schneller zum Ziel",
+    "p1.d": "Kein Framework, das man erst lernen muss. Eine gute User Story reicht für den Start.",
+    "p2.t": "Höchste Qualität",
+    "p2.d": "Zwei Review-Gates mit mehreren LLMs, plus automatisierte Tests.",
+    "p3.t": "KI als Enabler",
+    "p3.d": "Die KI plant, implementiert und testet – geführt von deinen Spezifikationen.",
+    "p4.t": "Menschen im Mittelpunkt",
+    "p4.d": "Der Mensch setzt das Ziel und gibt jede finale Freigabe.",
+    "next.title": "Wenn die Grundlagen sitzen",
+    "next.sub": "Beherrsche zuerst den einfachen Ansatz. Dann baue ihn Schritt für Schritt aus.",
+    "next.a.t": "Der nächste Level",
+    "next.a.1": "User Stories nachvollziehbar machen – neue wie auch geänderte.",
+    "next.a.2": "Tests detaillierter definieren, insbesondere End-to-End-Tests (E2E).",
+    "next.a.3": "Tests unverändert lassen, damit sie die Implementierung verlässlich prüfen.",
+    "next.b.t": "Tipps aus der Community",
+    "next.b.1": "Grenzen und Rahmenbedingungen in die Spezifikation schreiben (z. B. maximale Dateigröße). Nur was in der Spezifikation steht, wird abgesichert.",
+    "next.b.2": "Explizit festhalten, was sich nicht ändern darf.",
+    "next.b.3": "Tests für den Agenten tabu halten, damit er sie nicht anpasst, bis sie grün sind.",
+    "foot.by": "SDD-KISS von <a href=\"https://de.linkedin.com/in/dr-lofi-dewanto\" target=\"_blank\" rel=\"noopener\">Dr. Lofi Dewanto</a>",
+    "foot.post": "Zum ursprünglichen LinkedIn-Beitrag"
+  };
+  var en = {};
+  document.querySelectorAll("[data-i18n]").forEach(function (el) { en[el.dataset.i18n] = el.textContent; });
+  document.querySelectorAll("[data-i18n-html]").forEach(function (el) { en[el.dataset.i18nHtml] = el.innerHTML; });
+  var dict = { en: en, de: de };
+  var alt = {
+    en: "SDD-KISS process infographic: seven steps from defining functional specifications to completion, with an iteration loop.",
+    de: "Infografik zum SDD-KISS-Prozess: sieben Schritte vom GitHub-Issue bis zum Abschluss, mit Iterationsschleife."
+  };
+
+  function setLang(lang) {
+    var d = dict[lang] || en;
+    document.documentElement.lang = lang;
+    document.querySelectorAll("[data-i18n]").forEach(function (el) { var v = d[el.dataset.i18n]; if (v != null) el.textContent = v; });
+    document.querySelectorAll("[data-i18n-html]").forEach(function (el) { var v = d[el.dataset.i18nHtml]; if (v != null) el.innerHTML = v; });
+    var src = "img/sdd-kiss-" + lang + ".png";
+    document.getElementById("info-img").src = src;
+    document.getElementById("info-img").alt = alt[lang];
+    document.getElementById("info-link").href = src;
+    document.querySelectorAll("[data-set-lang]").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.setLang === lang)); });
+    try { localStorage.setItem("sddkiss-lang", lang); } catch (e) {}
+  }
+
+  document.querySelectorAll("[data-set-lang]").forEach(function (b) {
+    b.addEventListener("click", function () { setLang(b.dataset.setLang); });
+  });
+
+  var initial = null;
+  try { initial = localStorage.getItem("sddkiss-lang"); } catch (e) {}
+  if (!initial) initial = (navigator.language || "en").toLowerCase().indexOf("de") === 0 ? "de" : "en";
+  if (initial !== "en") setLang(initial);
+})();
+</script>
+</body>
+</html>
