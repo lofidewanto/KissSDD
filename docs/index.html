@@ -8,6 +8,9 @@
 <meta name="author" content="Dr. Lofi Dewanto">
 <meta name="theme-color" content="#0f3f86">
 <link rel="canonical" href="https://lofidewanto.github.io/KissSDD/">
+<link rel="alternate" hreflang="en" href="https://lofidewanto.github.io/KissSDD/?lang=en">
+<link rel="alternate" hreflang="de" href="https://lofidewanto.github.io/KissSDD/?lang=de">
+<link rel="alternate" hreflang="x-default" href="https://lofidewanto.github.io/KissSDD/">
 
 <!-- Icons -->
 <link rel="icon" href="favicon.ico" sizes="any">
@@ -461,6 +464,11 @@
     de: "Infografik zum KissSDD-Prozess: sieben Schritte von den funktionalen Spezifikationen bis zum Abschluss, mit Iterationsschleife."
   };
 
+  var titles = {
+    en: "KissSDD – Spec-Driven Development with AI, the simple way",
+    de: "KissSDD – Spec-Driven Development mit KI, ganz einfach"
+  };
+
   function setLang(lang) {
     var d = dict[lang] || en;
     document.documentElement.lang = lang;
@@ -471,17 +479,33 @@
     document.getElementById("info-img").alt = alt[lang];
     document.getElementById("info-link").href = src;
     document.querySelectorAll("[data-set-lang]").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.setLang === lang)); });
+    document.title = titles[lang];
     try { localStorage.setItem("sddkiss-lang", lang); } catch (e) {}
   }
 
+  // Keep ?lang=en|de in the address bar, so the current language can be shared as a link.
+  function setUrlLang(lang) {
+    try {
+      var url = new URL(window.location.href);
+      url.searchParams.set("lang", lang);
+      history.replaceState(null, "", url.pathname + url.search + url.hash);
+    } catch (e) {}
+  }
+
   document.querySelectorAll("[data-set-lang]").forEach(function (b) {
-    b.addEventListener("click", function () { setLang(b.dataset.setLang); });
+    b.addEventListener("click", function () { setLang(b.dataset.setLang); setUrlLang(b.dataset.setLang); });
   });
 
+  // Priority: ?lang=en|de in the URL, then the last choice, then the browser language.
   var initial = null;
-  try { initial = localStorage.getItem("sddkiss-lang"); } catch (e) {}
-  if (!initial) initial = (navigator.language || "en").toLowerCase().indexOf("de") === 0 ? "de" : "en";
+  try { initial = (new URLSearchParams(window.location.search).get("lang") || "").toLowerCase(); } catch (e) {}
+  if (!dict[initial]) {
+    initial = null;
+    try { initial = localStorage.getItem("sddkiss-lang"); } catch (e) {}
+    if (!dict[initial]) initial = (navigator.language || "en").toLowerCase().indexOf("de") === 0 ? "de" : "en";
+  }
   if (initial !== "en") setLang(initial);
+  else try { localStorage.setItem("sddkiss-lang", "en"); } catch (e) {}
 })();
 </script>
 </body>

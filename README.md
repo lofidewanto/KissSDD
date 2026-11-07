@@ -2,6 +2,8 @@
 
 **🌐 Website: [lofidewanto.github.io/KissSDD](https://lofidewanto.github.io/KissSDD/)**
 
+🇬🇧 [English](https://lofidewanto.github.io/KissSDD/?lang=en) · 🇩🇪 [Deutsch](https://lofidewanto.github.io/KissSDD/?lang=de)
+
 **Spec-Driven Development (SDD) with AI, the simple way. Keep It Simple, Stupid!**
 
 This repository holds the homepage for **KissSDD**, a simple approach to Specification-Driven Development with AI coding agents such as Claude Code or OpenCode. It is a static website, published with GitHub Pages. There is no application code and no build step.
@@ -28,7 +30,7 @@ The whole website lives in `docs/`:
 
 | Path | What it is |
 |---|---|
-| `docs/index.html` | The whole website: one self-contained page, English/German switch, light/dark mode |
+| `docs/index.html` | The whole website: one self-contained page, English/German switch (`?lang=en` / `?lang=de`), light/dark mode |
 | `docs/img/sdd-kiss-en.png`, `docs/img/sdd-kiss-de.png` | Process infographics (English / German) |
 | `docs/img/og-en.jpg` | 1200×630 link preview image for LinkedIn, WhatsApp etc. |
 | `docs/img/icons/`, `docs/favicon.ico`, `docs/site.webmanifest` | Browser and home-screen icons |
