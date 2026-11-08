@@ -74,7 +74,7 @@
 
   <section>
     <h2>4c · Plan v2</h2>
-    <p class="sub">Claude Code updates the plan with the accepted findings. The changed part of the plan:</p>
+    <p class="sub">Claude Code and/or OpenCode update the plan with the accepted findings. The changed part of the plan:</p>
     <div class="frame">
       <div class="frame-head"><strong>docs/user-story-plan/001-manage-prompts.md</strong> · diff v1 → v2</div>
 <pre class="diff"><span class="del">- validatePrompt(draft, prompts) -&gt; string[]         BR-1, BR-2, BR-3</span><span class="add">+ validatePrompt(draft, prompts, ignoreId = null) -&gt; string[]   BR-1..3, R-1</span><span class="add">+ normalizeTags(tags) -&gt; string[]   trim, lowercase, dedupe   BR-3, R-2</span><span class="add">+ parseTagInput(text) -&gt; string[]  "AI, java" -&gt; ["ai","java"]    R-2</span>  createPrompt(prompts, draft, now) -&gt; {prompts, errors}       AC-1
@@ -157,7 +157,7 @@
 
   <section>
     <h2>4c · Plan v2</h2>
-    <p class="sub">Claude Code aktualisiert den Plan mit den angenommenen Befunden. Der geänderte Teil des Plans:</p>
+    <p class="sub">Claude Code und/oder OpenCode aktualisieren den Plan mit den angenommenen Befunden. Der geänderte Teil des Plans:</p>
     <div class="frame">
       <div class="frame-head"><strong>docs/user-story-plan/001-manage-prompts.md</strong> · Diff v1 → v2</div>
 <pre class="diff"><span class="del">- validatePrompt(draft, prompts) -&gt; string[]         BR-1, BR-2, BR-3</span><span class="add">+ validatePrompt(draft, prompts, ignoreId = null) -&gt; string[]   BR-1..3, R-1</span><span class="add">+ normalizeTags(tags) -&gt; string[]   trim, lowercase, dedupe   BR-3, R-2</span><span class="add">+ parseTagInput(text) -&gt; string[]  "AI, java" -&gt; ["ai","java"]    R-2</span>  createPrompt(prompts, draft, now) -&gt; {prompts, errors}       AC-1
