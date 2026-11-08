@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Step 7 · Complete – KissSDD Example</title>
+<meta name="description" content="KissSDD example, step 7: commit, push and close the GitHub Issue for the prompt manager, then start the next iteration.">
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="icon" href="../img/icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="example.css">
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="index.html"><img src="../img/icons/favicon.svg" alt="" width="26" height="26"><b>Kiss<span>SDD</span></b> <small>Example</small></a>
+    <nav><a href="index.html">Overview</a></nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <ol class="stepper" aria-label="Steps">
+    <li><a href="step-1-functional-spec.html" class="done"><span class="dot">1</span><span class="step-name">Functional spec</span></a></li>
+    <li><a href="step-2-technical-spec.html" class="done"><span class="dot">2</span><span class="step-name">Technical spec</span></a></li>
+    <li><a href="step-3-implementation-plan.html" class="done"><span class="dot">3</span><span class="step-name">Plan</span></a></li>
+    <li><a href="step-4-review-plan.html" class="done"><span class="dot">4</span><span class="step-name">Review plan</span></a></li>
+    <li><a href="step-5-implement-test.html" class="done"><span class="dot">5</span><span class="step-name">Implement &amp; test</span></a></li>
+    <li><a href="step-6-review-implementation.html" class="done"><span class="dot">6</span><span class="step-name">Review code</span></a></li>
+    <li><a href="step-7-complete.html" aria-current="step"><span class="dot">7</span><span class="step-name">Complete</span></a></li>
+  </ol>
+</div>
+
+<main class="wrap">
+  <section class="hero">
+    <span class="eyebrow">Step 7 of 7</span>
+    <h1>Complete</h1>
+    <p class="lead">The AI writes the commit message and runs the commands. Anna checks that the commit links back to the issue, and the issue links to the plan. Anyone can then trace why the code looks the way it does.</p>
+    <div class="badges"><span class="badge">Human + AI</span><span class="badge model">Output: commit on main, Issue #1 closed</span></div>
+  </section>
+
+  <section>
+    <h2>7a · Commit and push</h2>
+    <div class="term">
+      <div class="frame-head"><strong>Terminal</strong></div>
+<pre><span class="cmd">$ git add TECH-SPEC.md docs/user-story-plan/001-manage-prompts.md app/</span>
+<span class="cmd">$ git commit</span>
+<span class="dim">feat: manage prompts in a simple web app (#1)
+
+Create, list, search, edit, delete and copy prompts. Data is stored
+in localStorage under kisssdd.prompts.v1. Plain HTML/CSS/JS, no build.
+
+- Plan: docs/user-story-plan/001-manage-prompts.md (v2)
+- Plan review: R-1..R-4 fixed, R-5 rejected, R-6 -&gt; #2
+- Code review: F-1 (XSS), F-2, F-3 fixed, F-4 rejected
+- Manual check: F-6 (blank page from file://), F-7 (sort order) fixed
+- Tests: 16 unit tests (npm test), AC-1..AC-8 checked by hand
+
+Closes #1</span>
+<span class="ok">[main 4b7e2c1] feat: manage prompts in a simple web app (#1)
+ 7 files changed, 655 insertions(+)</span>
+<span class="cmd">$ npm test --prefix app &amp;&amp; git push</span>
+<span class="ok">ℹ pass 16
+To github.com:anna/prompt-manager.git
+   9f31a0d..4b7e2c1  main -&gt; main</span></pre>
+    </div>
+    <p>“Closes #1” in the commit message closes the issue automatically when the commit reaches <code>main</code>.</p>
+  </section>
+
+  <section>
+    <h2>7b · The issue is closed</h2>
+    <div class="frame">
+      <div class="frame-head"><strong>Manage prompts in a simple web app</strong> #1 <span class="label">user-story</span> <span class="pill closed">Closed</span></div>
+      <div class="frame-body">
+        <ul>
+          <li>Anna: ✅ Plan approved (v2)</li>
+          <li>Anna: ✅ Implementation approved</li>
+          <li>Closed by commit <code>4b7e2c1</code>: <em>feat: manage prompts in a simple web app (#1)</em></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>7c · Iterate: the next round</h2>
+    <p class="sub">KissSDD is a loop. The next story is already waiting, and the team writes down what it learned.</p>
+
+    <div class="frame">
+      <div class="frame-head"><strong>Export and import prompts as JSON</strong> #2 <span class="label">user-story</span> <span class="pill">Open</span></div>
+      <div class="frame-body">
+        <p><em>As a</em> developer, <em>I want</em> to export my prompts to a JSON file and import them again, <em>so that</em> I have a backup and can move them to another computer.</p>
+        <p>Source: plan review finding R-6 and “out of scope” in #1. Starts again at <a href="step-1-functional-spec.html">step 1</a>.</p>
+      </div>
+    </div>
+
+    <h3>Lessons learned, fed back into the specs</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>What happened</th><th>Improvement</th><th>Where</th></tr></thead>
+        <tbody>
+          <tr><td>The plan v1 missed error handling (R-3, R-4).</td><td>Every plan gets a section “What can go wrong?”.</td><td>Prompt for step 3</td></tr>
+          <tr><td>The XSS bug (F-1) was in UI code without tests.</td><td>Add <code>npm run check</code>: fail if <code>innerHTML</code> appears in <code>app/</code>.</td><td>TECH-SPEC.md §4</td></tr>
+          <tr><td>The app was blank when opened from disk (F-6). ES modules don't load on <code>file://</code>.</td><td>Classic scripts only. Manual check always covers both ways of opening the app: from disk and from a web server.</td><td>TECH-SPEC.md §1 + §4</td></tr>
+          <tr><td>A test was changed during implementation.</td><td>Keep it this way: allowed only for new tests, with a written reason, re-checked in review.</td><td>TECH-SPEC.md §5</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>The whole story at a glance</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Step</th><th>Who</th><th>Model</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr><td>1 Functional spec</td><td>Anna + AI</td><td>Opus 5.5</td><td>Issue #1: story, 8 ACs, 4 BRs, found XSS risk</td></tr>
+          <tr><td>2 Technical spec</td><td>Ben + AI</td><td>Opus 5.5</td><td>TECH-SPEC.md: plain JS, no innerHTML</td></tr>
+          <tr><td>3 Plan</td><td>AI</td><td>Opus 5.5</td><td>Plan v1</td></tr>
+          <tr><td>4 Review plan</td><td>2 LLMs + Anna</td><td>Opus 5.5, GPT Sol 6.1</td><td>4 findings fixed in the plan, plan v2 approved</td></tr>
+          <tr><td>5 Implement &amp; test</td><td>AI</td><td>Sonnet 5.5</td><td>Code + 14 tests, 1 failure analysed</td></tr>
+          <tr><td>6 Review code</td><td>LLM + Anna</td><td>Opus 5.5</td><td>XSS fixed; Anna's manual check found a blank page from <code>file://</code>; 16 tests</td></tr>
+          <tr><td>7 Complete</td><td>Anna + AI</td><td>any</td><td>Commit, push, issue closed, issue #2 opened</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="cta">
+      <a class="btn primary" href="app/index.html">Try the finished Prompt Manager</a>
+      <a class="btn ghost" href="index.html">Back to the overview</a>
+    </div>
+  </section>
+
+  <nav class="pnav" aria-label="Step navigation">
+    <a href="step-6-review-implementation.html"><small>← Previous</small><strong>Step 6 · Review and Approve Again</strong></a>
+    <a class="next" href="../index.html"><small>Done →</small><strong>KissSDD homepage</strong></a>
+  </nav>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>KissSDD by <a href="https://de.linkedin.com/in/dr-lofi-dewanto" target="_blank" rel="noopener">Dr. Lofi Dewanto</a></span>
+    <a href="../index.html">KissSDD homepage</a>
+  </div>
+</footer>
+</body>
+</html>

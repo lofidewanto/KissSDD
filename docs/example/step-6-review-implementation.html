@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Step 6 · Review and Approve Again – KissSDD Example</title>
+<meta name="description" content="KissSDD example, step 6: an LLM code review of the prompt manager finds an XSS bug, and a human checks every acceptance criterion.">
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="icon" href="../img/icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="example.css">
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="index.html"><img src="../img/icons/favicon.svg" alt="" width="26" height="26"><b>Kiss<span>SDD</span></b> <small>Example</small></a>
+    <nav><a href="index.html">Overview</a></nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <ol class="stepper" aria-label="Steps">
+    <li><a href="step-1-functional-spec.html" class="done"><span class="dot">1</span><span class="step-name">Functional spec</span></a></li>
+    <li><a href="step-2-technical-spec.html" class="done"><span class="dot">2</span><span class="step-name">Technical spec</span></a></li>
+    <li><a href="step-3-implementation-plan.html" class="done"><span class="dot">3</span><span class="step-name">Plan</span></a></li>
+    <li><a href="step-4-review-plan.html" class="done"><span class="dot">4</span><span class="step-name">Review plan</span></a></li>
+    <li><a href="step-5-implement-test.html" class="done"><span class="dot">5</span><span class="step-name">Implement &amp; test</span></a></li>
+    <li><a href="step-6-review-implementation.html" aria-current="step"><span class="dot">6</span><span class="step-name">Review code</span></a></li>
+    <li><a href="step-7-complete.html"><span class="dot">7</span><span class="step-name">Complete</span></a></li>
+  </ol>
+</div>
+
+<main class="wrap">
+  <section class="hero">
+    <span class="eyebrow">Step 6 of 7 · second quality gate</span>
+    <h1>Review and Approve Again</h1>
+    <p class="lead">Green tests only show that the code does what the tests check. A top-tier model reviews the code against the specs, and Anna tries every acceptance criterion in the browser. Only then does she approve.</p>
+    <div class="badges"><span class="badge">Human + AI</span><span class="badge model">Reviewer: Opus 5.5</span><span class="badge model">Output: fixes + approval</span></div>
+  </section>
+
+  <section>
+    <h2>6a · The review prompt</h2>
+    <div class="term">
+      <div class="frame-head"><strong>Terminal</strong> · claude --model opus · new session</div>
+<pre><span class="cmd">&gt;</span> Review the uncommitted changes (git diff) against GitHub issue #1,
+  TECH-SPEC.md and docs/user-story-plan/001-manage-prompts.md.
+  Look for: bugs, security problems, violations of TECH-SPEC.md,
+  ACs that are not met, and tests that were weakened.
+  Give each finding an ID (F-x), a severity and a fix. Change nothing.</pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>6b · Findings and decisions</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>ID</th><th>Finding</th><th>Severity</th><th>Decision</th></tr></thead>
+        <tbody>
+          <tr><td><strong>F-1</strong></td><td><strong>XSS.</strong> <code>app.js</code> builds the list item header with <code>innerHTML</code> and puts in the title. A prompt titled <code>&lt;img src=x onerror=alert(1)&gt;</code> runs script. Breaks BR-4 and TECH-SPEC §3. Fix: build elements with <code>createElement</code> + <code>textContent</code>.</td><td><span class="sev high">high</span></td><td><span class="dec yes">Fix</span></td></tr>
+          <tr><td><strong>F-2</strong></td><td>Copy: when <code>navigator.clipboard.writeText</code> fails (no permission, insecure context), the promise is rejected silently and the user sees nothing. Breaks AC-8. Fix: <code>try/catch</code> with a message.</td><td><span class="sev med">medium</span></td><td><span class="dec yes">Fix</span></td></tr>
+          <tr><td><strong>F-3</strong></td><td>Delete the prompt that is open in the edit form, then click “Save changes”: you get “Prompt not found.” Fix: leave edit mode when that prompt is deleted.</td><td><span class="sev med">medium</span></td><td><span class="dec yes">Fix</span></td></tr>
+          <tr><td><strong>F-4</strong></td><td>Replace <code>confirm()</code> with a custom modal dialog for a nicer look.</td><td><span class="sev low">low</span></td><td><span class="dec no">Reject</span>: AC-5 is met. KISS.</td></tr>
+          <tr><td><strong>F-5</strong></td><td>Checked the test change from step 5 (<code>"writ"</code> → <code>"writing"</code>). The test still checks tag search and is not weaker.</td><td><span class="sev low">info</span></td><td><span class="dec yes">OK</span></td></tr>
+          <tr><td><strong>F-6</strong></td><td><strong>Found by Anna</strong> in the manual check (6d), not by the reviewer. Opened from disk (<code>file://</code>), the page stays empty: no list and no “No prompts yet” hint, so AC-2 fails. Browsers block <code>&lt;script type="module"&gt;</code> on <code>file://</code>. Fix: load <code>prompt-store.js</code> and <code>app.js</code> as classic scripts; the store publishes one global, <code>PromptStore</code>.</td><td><span class="sev high">high</span></td><td><span class="dec yes">Fix</span></td></tr>
+          <tr><td><strong>F-7</strong></td><td><strong>Found by the AI</strong> while it wrote a regression test for AC-2. Two prompts saved in the same millisecond have the same <code>updatedAt</code>, and the sort keeps them oldest first. Fix: an edited prompt moves to the end of the list, and the sort uses the list position when timestamps are equal. Two new tests.</td><td><span class="sev med">medium</span></td><td><span class="dec yes">Fix</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout">
+      <p><strong>Why the tests didn't catch F-1.</strong> The unit tests cover <code>prompt-store.js</code>, and the bug was in the UI code. Step 1 wrote BR-4 down, step 2 made it a coding standard, and so the reviewer had a clear rule to check against. Only what the spec names gets hardened.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>6c · The fix for F-1</h2>
+    <p class="sub">Sonnet 5.5 applies F-1 to F-3, then F-6 and F-7 after the manual check. It runs the tests again (16/16 green, two of them new for F-7).</p>
+    <div class="frame">
+      <div class="frame-head"><strong>app/app.js</strong> · diff</div>
+<pre class="diff">    const li = el('li');
+<span class="del">-   li.innerHTML = `
+-     &lt;div class="item-head"&gt;
+-       &lt;h2&gt;${p.title}&lt;/h2&gt;
+-       &lt;span class="meta"&gt;Updated ${new Date(p.updatedAt).toLocaleString()}&lt;/span&gt;
+-     &lt;/div&gt;
+-     &lt;div class="tags"&gt;${p.tags.map((t) =&gt; `&lt;span class="tag"&gt;${t}&lt;/span&gt;`).join('')}&lt;/div&gt;`;</span><span class="add">+   const head = el('div', 'item-head');
++   head.append(el('h2', '', p.title), el('span', 'meta', `Updated ${new Date(p.updatedAt).toLocaleString()}`));
++   const tags = el('div', 'tags');
++   tags.append(...p.tags.map((t) =&gt; el('span', 'tag', t)));</span></pre>
+    </div>
+    <p>The helper <code>el(tag, className, text)</code> always sets <code>textContent</code>, so user data can't be read as HTML.</p>
+  </section>
+
+  <section>
+    <h2>6d · Anna's manual acceptance check</h2>
+    <p class="sub">Anna opens the app and goes through the issue line by line. You can do the same: <a href="app/index.html">open the app</a>.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>ID</th><th>What Anna did</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr><td>AC-1</td><td>Created “Code review” with tags <code>Review, java</code></td><td>✅ appears at the top, tags shown as <code>review</code> <code>java</code>, form is empty</td></tr>
+          <tr><td>AC-2</td><td>Opened the app with no data, then with 3 prompts. First try: double-clicked <code>index.html</code> in Finder</td><td>❌ first try: blank page, no hint (→ F-6)<br>✅ after the fix: empty hint, then newest change first, from disk and from a web server</td></tr>
+          <tr><td>AC-3</td><td>Searched “JAVA”, “junit”, “summ”</td><td>✅ matches tag, text and title</td></tr>
+          <tr><td>AC-4</td><td>Edited the oldest prompt, kept its title</td><td>✅ saved, moved to the top (R-1)</td></tr>
+          <tr><td>AC-5</td><td>Clicked Delete, then Cancel; then Delete, then OK</td><td>✅ kept, then removed</td></tr>
+          <tr><td>AC-6</td><td>Clicked Copy, pasted into Claude Code</td><td>✅ text pasted, confirmation shown</td></tr>
+          <tr><td>AC-7</td><td>Reloaded, then closed and reopened the browser</td><td>✅ prompts still there</td></tr>
+          <tr><td>AC-8</td><td>Saved with empty title; duplicate title; tag <code>c++</code></td><td>✅ clear messages, nothing saved</td></tr>
+          <tr><td>BR-4</td><td>Created a prompt titled <code>&lt;img src=x onerror=alert(1)&gt;</code></td><td>✅ shown as text, no script runs (F-1)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout warn">
+      <p><strong>The human found what both LLMs missed.</strong> Every unit test was green and the code review was done, but the app didn't start the way Anna opened it. The reviewers only read the code; nobody had opened it in a browser that way. This is why step 6 ends with a person trying every acceptance criterion, not with a green test run.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>6e · Human approval</h2>
+    <div class="frame">
+      <div class="frame-head"><strong>Anna</strong> commented on issue #1</div>
+      <div class="frame-body">
+        <p>✅ <strong>Implementation approved.</strong> Code review by Opus 5.5: F-1..F-3 fixed, F-4 rejected (KISS). Manual check: F-6 (blank page from <code>file://</code>) and F-7 (sort order on equal timestamps) fixed. 16/16 unit tests green. AC-1..AC-8 and BR-4 checked by hand in Chrome and Firefox, from disk and from a web server, light and dark mode, and at phone width.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Done when …</h2>
+    <ul>
+      <li>A top-tier model has reviewed the code against the specs, not only for style.</li>
+      <li>Every finding is fixed or rejected with a reason, and the tests are green again.</li>
+      <li>A human has checked every acceptance criterion and approved in writing.</li>
+    </ul>
+  </section>
+
+  <nav class="pnav" aria-label="Step navigation">
+    <a href="step-5-implement-test.html"><small>← Previous</small><strong>Step 5 · Implement and Test</strong></a>
+    <a class="next" href="step-7-complete.html"><small>Next →</small><strong>Step 7 · Complete</strong></a>
+  </nav>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>KissSDD by <a href="https://de.linkedin.com/in/dr-lofi-dewanto" target="_blank" rel="noopener">Dr. Lofi Dewanto</a></span>
+    <a href="../index.html">KissSDD homepage</a>
+  </div>
+</footer>
+</body>
+</html>

@@ -155,6 +155,17 @@
   .model .pick span.fav { background: var(--green-soft); color: var(--green); }
   .model p { margin: 0; color: var(--muted); font-size: 15px; }
 
+  .example { display: grid; grid-template-columns: 1.1fr 1fr; gap: 28px; align-items: start; }
+  .example .intro { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 24px; }
+  .example .intro h3 { margin: 0 0 8px; font-size: 20px; }
+  .example .intro p { margin: 0 0 14px; color: var(--muted); font-size: 16px; }
+  .example .intro .note { font-size: 14px; }
+  ol.walk { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  ol.walk a { display: flex; align-items: center; gap: 12px; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; text-decoration: none; color: var(--text); font-size: 15px; }
+  ol.walk a:hover { border-color: var(--blue); }
+  ol.walk .n { flex: none; display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--blue); color: #fff; font-weight: 800; font-size: 14px; }
+  ol.walk small { display: block; color: var(--muted); font-size: 13px; }
+
   footer { border-top: 1px solid var(--line); padding: 32px 0 48px; color: var(--muted); font-size: 15px; }
   footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; }
 
@@ -163,7 +174,7 @@
 
   @media (max-width: 860px) {
     nav.links { display: none; }
-    .why, .next { grid-template-columns: 1fr; }
+    .why, .next, .example { grid-template-columns: 1fr; }
     .pillars, .models { grid-template-columns: 1fr 1fr; }
   }
   @media (max-width: 480px) {
@@ -181,6 +192,7 @@
       <a href="#why" data-i18n="nav.why">Why KISS</a>
       <a href="#process" data-i18n="nav.process">Process</a>
       <a href="#steps" data-i18n="nav.steps">7 Steps</a>
+      <a href="#example" data-i18n="nav.example">Example</a>
       <a href="#models" data-i18n="nav.models">Models</a>
       <a href="#next" data-i18n="nav.next">Next Steps</a>
     </nav>
@@ -200,6 +212,7 @@
       <div class="cta">
         <a class="btn primary" href="#process" data-i18n="hero.cta1">See the process</a>
         <a class="btn ghost" href="#steps" data-i18n="hero.cta2">Read the 7 steps</a>
+        <a class="btn ghost" href="example/index.html" data-i18n="hero.cta3">See a full example</a>
       </div>
     </div>
   </section>
@@ -281,6 +294,34 @@
       <div class="loop">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg>
         <span data-i18n="steps.loop">Iterate — for continuous improvement.</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="example">
+    <div class="wrap">
+      <h2 data-i18n="ex.title">A complete example, step by step</h2>
+      <p class="sub" data-i18n="ex.sub">“Create a simple web app for managing prompts”: one small feature, taken through all seven steps, from the first User Story to the closed GitHub Issue.</p>
+      <div class="example">
+        <div class="intro">
+          <h3 data-i18n="ex.h">See every step in action</h3>
+          <p data-i18n="ex.p1">Each step has its own page: what the human writes, what the AI produces, the review findings, the human decisions and what ends up in the repository. You'll see real prompts, a real failing test and a security bug found in review.</p>
+          <p data-i18n="ex.p2">The result is a working Prompt Manager in plain HTML and JavaScript, with 16 unit tests. Try it in your browser.</p>
+          <div class="cta">
+            <a class="btn primary" href="example/index.html" data-i18n="ex.cta1">Start the walkthrough</a>
+            <a class="btn ghost" href="example/app/index.html" data-i18n="ex.cta2">Try the finished app</a>
+          </div>
+          <p class="note" data-lang-only="de" style="margin:14px 0 0">Hinweis: Das Beispiel ist auf Englisch.</p>
+        </div>
+        <ol class="walk">
+          <li><a href="example/step-1-functional-spec.html"><span class="n">1</span><span><span data-i18n="s1.t">Define Functional Specifications</span><small data-i18n="ex.o1">GitHub Issue #1 with acceptance criteria</small></span></a></li>
+          <li><a href="example/step-2-technical-spec.html"><span class="n">2</span><span><span data-i18n="s2.t">Define Technical Specifications</span><small data-i18n="ex.o2">TECH-SPEC.md</small></span></a></li>
+          <li><a href="example/step-3-implementation-plan.html"><span class="n">3</span><span><span data-i18n="s3.t">Generate Implementation Plan</span><small data-i18n="ex.o3">docs/user-story-plan/001-manage-prompts.md</small></span></a></li>
+          <li><a href="example/step-4-review-plan.html"><span class="n">4</span><span><span data-i18n="s4.t">Review and Approve</span><small data-i18n="ex.o4">Two LLMs review, the human decides</small></span></a></li>
+          <li><a href="example/step-5-implement-test.html"><span class="n">5</span><span><span data-i18n="s5.t">Implement and Test</span><small data-i18n="ex.o5">Code, tests and a failure analysed</small></span></a></li>
+          <li><a href="example/step-6-review-implementation.html"><span class="n">6</span><span><span data-i18n="s6.t">Review and Approve Again</span><small data-i18n="ex.o6">XSS found; the human finds what the LLMs missed</small></span></a></li>
+          <li><a href="example/step-7-complete.html"><span class="n">7</span><span><span data-i18n="s7.t">Complete</span><small data-i18n="ex.o7">Commit, push, close the issue, iterate</small></span></a></li>
+        </ol>
       </div>
     </div>
   </section>
@@ -392,6 +433,22 @@
     "hero.lead": "Starte mit einer gut durchdachten User Story, lass die KI planen und umsetzen – und behalte als Mensch jede Freigabe in der Hand. Sieben Schritte von der Idee bis zum Abschluss — <span class=\"kiss\">Keep It Simple, Stupid!</span>",
     "hero.cta1": "Zum Prozess",
     "hero.cta2": "Die 7 Schritte lesen",
+    "hero.cta3": "Ein komplettes Beispiel",
+    "nav.example": "Beispiel",
+    "ex.title": "Ein komplettes Beispiel, Schritt für Schritt",
+    "ex.sub": "„Erstelle eine einfache Web-App zur Verwaltung von Prompts“: ein kleines Feature, durch alle sieben Schritte – von der ersten User Story bis zum geschlossenen GitHub-Issue.",
+    "ex.h": "Jeden Schritt in Aktion sehen",
+    "ex.p1": "Jeder Schritt hat eine eigene Seite: was der Mensch schreibt, was die KI erzeugt, die Review-Ergebnisse, die Entscheidungen des Menschen und was im Repository landet. Mit echten Prompts, einem echten fehlschlagenden Test und einer Sicherheitslücke, die im Review gefunden wird.",
+    "ex.p2": "Das Ergebnis ist ein funktionierender Prompt-Manager in reinem HTML und JavaScript, mit 16 Unit-Tests. Probiere ihn direkt im Browser aus.",
+    "ex.cta1": "Zum Beispiel",
+    "ex.cta2": "Fertige App ausprobieren",
+    "ex.o1": "GitHub-Issue #1 mit Akzeptanzkriterien",
+    "ex.o2": "TECH-SPEC.md",
+    "ex.o3": "docs/user-story-plan/001-manage-prompts.md",
+    "ex.o4": "Zwei LLMs prüfen, der Mensch entscheidet",
+    "ex.o5": "Code, Tests und ein analysierter Fehlschlag",
+    "ex.o6": "XSS gefunden; der Mensch findet, was die LLMs übersehen haben",
+    "ex.o7": "Commit, Push, Issue schließen, iterieren",
     "why.title": "Warum KISS?",
     "why.p1": "Viele Entwickler tun sich mit SDD schwer, weil es so viele Frameworks gibt. Jedes bringt eigene Befehle, Vorlagen und Zeremonien mit.",
     "why.callout": "<strong>Wenn du neu bei SDD bist, starte nicht mit einem Framework.</strong> Fang einfach an: eine klare funktionale Spezifikation, eine klare technische Spezifikation, ein KI-Agent wie Claude Code oder OpenCode – und ein Mensch, der prüft und freigibt.",

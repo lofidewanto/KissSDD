@@ -24,6 +24,10 @@ There are many SDD frameworks (AI Unified Process, GitHub Spec Kit, OpenSpec, BM
 
 Then iterate for continuous improvement. The full explanation, model recommendations per step, and next steps are on the [website](https://lofidewanto.github.io/KissSDD/), in English and German.
 
+## Step-by-step example
+
+**👉 [Create a simple web app for managing prompts](https://lofidewanto.github.io/KissSDD/example/)**: one feature taken through all seven steps, one page per step. It shows the User Story, the technical spec, the plan, both reviews with human decisions, real test runs and the commit. The result is a [working Prompt Manager](https://lofidewanto.github.io/KissSDD/example/app/) in plain HTML/JS with 16 unit tests (`cd docs/example/app && npm test`). The example is in English.
+
 ## Repository contents
 
 The whole website lives in `docs/`:
@@ -31,6 +35,8 @@ The whole website lives in `docs/`:
 | Path | What it is |
 |---|---|
 | `docs/index.html` | The whole website: one self-contained page, English/German switch (`?lang=en` / `?lang=de`), light/dark mode |
+| `docs/example/` | Step-by-step example: `index.html`, one page per step (`step-1-…html` to `step-7-…html`), shared `example.css` |
+| `docs/example/app/` | The Prompt Manager built in the example, with its unit tests |
 | `docs/img/sdd-kiss-en.png`, `docs/img/sdd-kiss-de.png` | Process infographics (English / German) |
 | `docs/img/og-en.jpg` | 1200×630 link preview image for LinkedIn, WhatsApp etc. |
 | `docs/img/icons/`, `docs/favicon.ico`, `docs/site.webmanifest` | Browser and home-screen icons |

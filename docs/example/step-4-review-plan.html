@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Step 4 · Review and Approve – KissSDD Example</title>
+<meta name="description" content="KissSDD example, step 4: two LLMs review the implementation plan for the prompt manager and a human approves it.">
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="icon" href="../img/icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="example.css">
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="index.html"><img src="../img/icons/favicon.svg" alt="" width="26" height="26"><b>Kiss<span>SDD</span></b> <small>Example</small></a>
+    <nav><a href="index.html">Overview</a></nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <ol class="stepper" aria-label="Steps">
+    <li><a href="step-1-functional-spec.html" class="done"><span class="dot">1</span><span class="step-name">Functional spec</span></a></li>
+    <li><a href="step-2-technical-spec.html" class="done"><span class="dot">2</span><span class="step-name">Technical spec</span></a></li>
+    <li><a href="step-3-implementation-plan.html" class="done"><span class="dot">3</span><span class="step-name">Plan</span></a></li>
+    <li><a href="step-4-review-plan.html" aria-current="step"><span class="dot">4</span><span class="step-name">Review plan</span></a></li>
+    <li><a href="step-5-implement-test.html"><span class="dot">5</span><span class="step-name">Implement &amp; test</span></a></li>
+    <li><a href="step-6-review-implementation.html"><span class="dot">6</span><span class="step-name">Review code</span></a></li>
+    <li><a href="step-7-complete.html"><span class="dot">7</span><span class="step-name">Complete</span></a></li>
+  </ol>
+</div>
+
+<main class="wrap">
+  <section class="hero">
+    <span class="eyebrow">Step 4 of 7 · first quality gate</span>
+    <h1>Review and Approve</h1>
+    <p class="lead">A bug found in the plan costs one line of text to fix. The same bug found in the code costs a code change, a test change and another review. So the plan gets reviewed by more than one LLM, and a human approves it.</p>
+    <div class="badges"><span class="badge">Human + AI</span><span class="badge model">Reviewers: Opus 5.5 (fresh session) + GPT Sol 6.1</span><span class="badge model">Output: plan v2, approved</span></div>
+  </section>
+
+  <section>
+    <h2>4a · The review prompt</h2>
+    <p class="sub">Anna uses the same prompt for both reviewers. The Opus reviewer runs in a <em>new</em> session, so it doesn't defend its own plan.</p>
+    <div class="term">
+      <div class="frame-head"><strong>Terminal</strong> · new session</div>
+<pre><span class="cmd">&gt;</span> You are a strict reviewer. Compare docs/user-story-plan/001-manage-prompts.md
+  with GitHub issue #1 and TECH-SPEC.md.
+  Find: missing ACs/BRs, wrong logic, unhandled errors, violations of
+  TECH-SPEC.md, and over-engineering. Give each finding an ID (R-x),
+  a severity (high/medium/low) and a concrete fix. Do not change any file.</pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>4b · Findings and human decisions</h2>
+    <p class="sub">The reviewers make suggestions. Anna makes the decisions, and she rejects a finding when it goes against KISS.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>ID</th><th>Finding</th><th>Found by</th><th>Severity</th><th>Anna's decision</th></tr></thead>
+        <tbody>
+          <tr><td><strong>R-1</strong></td><td><code>validatePrompt</code> checks title uniqueness against <em>all</em> prompts. On edit, the prompt clashes with itself, so you can't save an edit that keeps the title. Fix: add an <code>ignoreId</code> parameter.</td><td>Both</td><td><span class="sev high">high</span></td><td><span class="dec yes">Accept</span></td></tr>
+          <tr><td><strong>R-2</strong></td><td>BR-3 says tags are stored in lowercase without duplicates. The plan doesn't say where that happens. Fix: <code>normalizeTags()</code> (trim, lowercase, dedupe) plus <code>parseTagInput()</code> for the comma field, both with tests.</td><td>GPT Sol 6.1</td><td><span class="sev med">medium</span></td><td><span class="dec yes">Accept</span></td></tr>
+          <tr><td><strong>R-3</strong></td><td><code>localStorage.setItem</code> throws when storage is full. AC-8 asks for a clear message. Fix: <code>savePrompts</code> returns an error message instead of throwing.</td><td>Opus 5.5</td><td><span class="sev med">medium</span></td><td><span class="dec yes">Accept</span></td></tr>
+          <tr><td><strong>R-4</strong></td><td>Corrupt JSON in storage makes <code>loadPrompts</code> throw, and the app stays blank. Fix: return an empty list plus a warning.</td><td>Opus 5.5</td><td><span class="sev med">medium</span></td><td><span class="dec yes">Accept</span></td></tr>
+          <tr><td><strong>R-5</strong></td><td>Debounce the search input for performance.</td><td>GPT Sol 6.1</td><td><span class="sev low">low</span></td><td><span class="dec no">Reject</span>: a few hundred prompts filter in under 1&nbsp;ms. KISS.</td></tr>
+          <tr><td><strong>R-6</strong></td><td>Add JSON export as a backup against data loss.</td><td>Opus 5.5</td><td><span class="sev low">low</span></td><td><span class="dec later">Later</span>: out of scope in issue #1, so it goes in the next story.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout">
+      <p><strong>Two reviewers, different findings.</strong> Both found R-1. Each found something the other missed. That's why KissSDD says “one or more LLMs”.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>4c · Plan v2</h2>
+    <p class="sub">Claude Code updates the plan with the accepted findings. The changed part of the plan:</p>
+    <div class="frame">
+      <div class="frame-head"><strong>docs/user-story-plan/001-manage-prompts.md</strong> · diff v1 → v2</div>
+<pre class="diff"><span class="del">- validatePrompt(draft, prompts) -&gt; string[]         BR-1, BR-2, BR-3</span><span class="add">+ validatePrompt(draft, prompts, ignoreId = null) -&gt; string[]   BR-1..3, R-1</span><span class="add">+ normalizeTags(tags) -&gt; string[]   trim, lowercase, dedupe   BR-3, R-2</span><span class="add">+ parseTagInput(text) -&gt; string[]  "AI, java" -&gt; ["ai","java"]    R-2</span>  createPrompt(prompts, draft, now) -&gt; {prompts, errors}       AC-1
+  ...
+<span class="del">- loadPrompts(storage) -&gt; prompts                             AC-7</span><span class="del">- savePrompts(storage, prompts)                               AC-7</span><span class="add">+ loadPrompts(storage) -&gt; {prompts, warning}  corrupt -&gt; [] + msg  AC-7, R-4</span><span class="add">+ savePrompts(storage, prompts) -&gt; error | null  never throws     AC-8, R-3</span>
+  ## Tests (unit)
+<span class="add">+ R-1 edit keeps own title · R-2 normalize tags</span><span class="add">+ R-3 full storage -&gt; message · R-4 corrupt data -&gt; warning</span>
+  ## Review log
+<span class="add">+ v2: accepted R-1..R-4. Rejected R-5 (KISS). R-6 moved to next story.</span></pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>4d · Human approval</h2>
+    <div class="frame">
+      <div class="frame-head"><strong>Anna</strong> commented on issue #1</div>
+      <div class="frame-body">
+        <p>✅ <strong>Plan approved</strong>: <code>docs/user-story-plan/001-manage-prompts.md</code> v2.<br>
+        Reviewed by Opus 5.5 and GPT Sol 6.1; R-1..R-4 included, R-5 rejected, R-6 → new issue. Go ahead with the implementation.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Done when …</h2>
+    <ul>
+      <li>At least one LLM, other than the one that wrote the plan, has reviewed it.</li>
+      <li>Every finding has a human decision: accept, reject (with a reason) or later.</li>
+      <li>The plan is updated and a human has approved it in writing.</li>
+    </ul>
+  </section>
+
+  <nav class="pnav" aria-label="Step navigation">
+    <a href="step-3-implementation-plan.html"><small>← Previous</small><strong>Step 3 · Implementation Plan</strong></a>
+    <a class="next" href="step-5-implement-test.html"><small>Next →</small><strong>Step 5 · Implement and Test</strong></a>
+  </nav>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>KissSDD by <a href="https://de.linkedin.com/in/dr-lofi-dewanto" target="_blank" rel="noopener">Dr. Lofi Dewanto</a></span>
+    <a href="../index.html">KissSDD homepage</a>
+  </div>
+</footer>
+</body>
+</html>

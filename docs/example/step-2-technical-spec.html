@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Step 2 · Technical Specifications – KissSDD Example</title>
+<meta name="description" content="KissSDD example, step 2: write the global technical specification for the prompt manager web app.">
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="icon" href="../img/icons/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="example.css">
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="index.html"><img src="../img/icons/favicon.svg" alt="" width="26" height="26"><b>Kiss<span>SDD</span></b> <small>Example</small></a>
+    <nav><a href="index.html">Overview</a></nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <ol class="stepper" aria-label="Steps">
+    <li><a href="step-1-functional-spec.html" class="done"><span class="dot">1</span><span class="step-name">Functional spec</span></a></li>
+    <li><a href="step-2-technical-spec.html" aria-current="step"><span class="dot">2</span><span class="step-name">Technical spec</span></a></li>
+    <li><a href="step-3-implementation-plan.html"><span class="dot">3</span><span class="step-name">Plan</span></a></li>
+    <li><a href="step-4-review-plan.html"><span class="dot">4</span><span class="step-name">Review plan</span></a></li>
+    <li><a href="step-5-implement-test.html"><span class="dot">5</span><span class="step-name">Implement &amp; test</span></a></li>
+    <li><a href="step-6-review-implementation.html"><span class="dot">6</span><span class="step-name">Review code</span></a></li>
+    <li><a href="step-7-complete.html"><span class="dot">7</span><span class="step-name">Complete</span></a></li>
+  </ol>
+</div>
+
+<main class="wrap">
+  <section class="hero">
+    <span class="eyebrow">Step 2 of 7 · can run in parallel with step 1</span>
+    <h1>Define Technical Specifications</h1>
+    <p class="lead">The functional spec says <em>what</em>. The technical spec says <em>with what</em> and <em>under which rules</em>. It's global: written once for the project and reused by every User Story.</p>
+    <div class="badges"><span class="badge">Human + AI</span><span class="badge model">Model: Opus 5.5</span><span class="badge model">Output: TECH-SPEC.md</span></div>
+  </section>
+
+  <section>
+    <h2>2a · Agree on the stack</h2>
+    <p class="sub">Anna's colleague Ben owns the technical side. He asks the AI for options, then makes the decision himself.</p>
+    <div class="frame">
+      <div class="frame-head"><strong>Claude Code</strong> · Opus 5.5</div>
+      <div class="chat">
+        <div class="msg human"><span class="who">Ben</span>
+          <p>We want a small prompt manager web app. Single user, data stays in the browser, hosted on GitHub Pages. Suggest a stack. Keep it as simple as possible and list the trade-offs. Don't write code.</p>
+        </div>
+        <div class="msg ai"><span class="who">AI</span>
+          <p>Three options:</p>
+          <ol>
+            <li><strong>Plain HTML + CSS + JavaScript (ES modules), localStorage.</strong> No build, no dependencies, runs from any static host. Downside: you write the DOM code yourself.</li>
+            <li><strong>Vue 3 via CDN.</strong> Nicer templates, still no build. Downside: one external dependency to keep up to date.</li>
+            <li><strong>Spring Boot + Thymeleaf + database.</strong> Needed for multiple users. Clearly too much for this scope, and GitHub Pages can't run it.</li>
+          </ol>
+          <p>For one user and one screen, option 1 is the simplest. Tests can use Node's built-in test runner, so you need no test framework either.</p>
+        </div>
+        <div class="msg human"><span class="who">Ben</span>
+          <p>Option 1. Write TECH-SPEC.md. Add our coding standards: domain logic separate from the DOM, and user data never via innerHTML.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>2b · The result: <code>TECH-SPEC.md</code></h2>
+    <p class="sub">Saved in the repository root, so both humans and the AI agent can read it for every story. In a Java team this file would name Java, Spring Boot, Angular and so on. The rest of the process doesn't change.</p>
+    <div class="frame">
+      <div class="frame-head"><strong>TECH-SPEC.md</strong></div>
+      <pre># Technical Specification – Prompt Manager
+
+## 1. Stack
+- HTML5, CSS3, JavaScript (ES2022, ES modules). No framework.
+- No build step, no bundler, no runtime dependencies.
+- Persistence: browser localStorage (see data model in the user story).
+- Hosting: any static web server, e.g. GitHub Pages.
+- Supported browsers: current Chrome, Firefox, Safari, Edge.
+
+## 2. Architecture
+app/
+  index.html          markup only
+  app.js              UI: reads the DOM, calls the store, renders
+  prompt-store.js     domain logic: validation, create, update, delete,
+                      search, sort, load, save. NO DOM access.
+  prompt-store.test.js unit tests for prompt-store.js
+
+- Functions in prompt-store.js are pure where possible: they take the
+  current list and return a new list. No hidden global state.
+- Storage is passed in as a parameter, so tests can use a fake storage.
+- Errors from validation are returned as a list of messages, not thrown.
+
+## 3. Coding standards
+- User data is written to the page ONLY with textContent or
+  createElement. Never innerHTML, outerHTML or insertAdjacentHTML.
+- Small functions, clear names, no abbreviations.
+- Comments explain "why", not "what".
+- Accessible: every input has a label, status messages use aria-live.
+- Works in light and dark mode (prefers-color-scheme) and at 360px width.
+
+## 4. Testing
+- Node.js 20+ built-in test runner: `npm test` (node --test).
+- Every acceptance criterion (AC-x) and business rule (BR-x) that can
+  be checked without a browser has at least one unit test.
+  The test name starts with its ID, e.g. "AC-3: …".
+- Manual check of all ACs in the browser before approval (step 6).
+
+## 5. Constraints – what must not change
+- No new dependencies without approval.
+- The storage key format "kisssdd.prompts.v&lt;n&gt;" stays; a new
+  version needs a migration.
+- Tests that were approved in an earlier story are not changed to make
+  new code pass.</pre>
+    </div>
+    <div class="callout">
+      <p><strong>Tip from the community:</strong> write limits and things that must not change into the spec. The AI follows what is written. It can't follow what you only had in your head.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Done when …</h2>
+    <ul>
+      <li>Stack, architecture, coding standards and testing rules are written down.</li>
+      <li>Constraints and “must not change” rules are explicit.</li>
+      <li>The file is in the repository, where the AI agent can read it.</li>
+    </ul>
+  </section>
+
+  <nav class="pnav" aria-label="Step navigation">
+    <a href="step-1-functional-spec.html"><small>← Previous</small><strong>Step 1 · Functional Specifications</strong></a>
+    <a class="next" href="step-3-implementation-plan.html"><small>Next →</small><strong>Step 3 · Implementation Plan</strong></a>
+  </nav>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>KissSDD by <a href="https://de.linkedin.com/in/dr-lofi-dewanto" target="_blank" rel="noopener">Dr. Lofi Dewanto</a></span>
+    <a href="../index.html">KissSDD homepage</a>
+  </div>
+</footer>
+</body>
+</html>
