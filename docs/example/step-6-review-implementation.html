@@ -3,33 +3,34 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Step 6 · Review and Approve Again – KissSDD Example</title>
+<title data-de="Schritt 6 · Erneutes Review und Freigabe – KissSDD-Beispiel">Step 6 · Review and Approve Again – KissSDD Example</title>
 <meta name="description" content="KissSDD example, step 6: an LLM code review of the prompt manager finds an XSS bug, and a human checks every acceptance criterion.">
 <link rel="icon" href="../favicon.ico" sizes="any">
 <link rel="icon" href="../img/icons/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="example.css">
+<script src="example.js"></script>
 </head>
 <body>
 <header class="top">
   <div class="wrap">
-    <a class="brand" href="index.html"><img src="../img/icons/favicon.svg" alt="" width="26" height="26"><b>Kiss<span>SDD</span></b> <small>Example</small></a>
-    <nav><a href="index.html">Overview</a></nav>
+    <a class="brand" href="index.html"><img src="../img/icons/favicon.svg" alt="" width="26" height="26"><b>Kiss<span>SDD</span></b> <small><span data-lang-only="en">Example</span><span data-lang-only="de">Beispiel</span></small></a>
+    <nav class="tools"><a href="index.html"><span data-lang-only="en">Overview</span><span data-lang-only="de">Übersicht</span></a><div class="lang" role="group" aria-label="Language"><button type="button" data-set-lang="en" aria-pressed="true">EN</button><button type="button" data-set-lang="de" aria-pressed="false">DE</button></div></nav>
   </div>
 </header>
 
 <div class="wrap">
   <ol class="stepper" aria-label="Steps">
-    <li><a href="step-1-functional-spec.html" class="done"><span class="dot">1</span><span class="step-name">Functional spec</span></a></li>
-    <li><a href="step-2-technical-spec.html" class="done"><span class="dot">2</span><span class="step-name">Technical spec</span></a></li>
-    <li><a href="step-3-implementation-plan.html" class="done"><span class="dot">3</span><span class="step-name">Plan</span></a></li>
-    <li><a href="step-4-review-plan.html" class="done"><span class="dot">4</span><span class="step-name">Review plan</span></a></li>
-    <li><a href="step-5-implement-test.html" class="done"><span class="dot">5</span><span class="step-name">Implement &amp; test</span></a></li>
-    <li><a href="step-6-review-implementation.html" aria-current="step"><span class="dot">6</span><span class="step-name">Review code</span></a></li>
-    <li><a href="step-7-complete.html"><span class="dot">7</span><span class="step-name">Complete</span></a></li>
+    <li><a href="step-1-functional-spec.html" class="done"><span class="dot">1</span><span class="step-name"><span data-lang-only="en">Functional spec</span><span data-lang-only="de">Funktionale Spez.</span></span></a></li>
+    <li><a href="step-2-technical-spec.html" class="done"><span class="dot">2</span><span class="step-name"><span data-lang-only="en">Technical spec</span><span data-lang-only="de">Technische Spez.</span></span></a></li>
+    <li><a href="step-3-implementation-plan.html" class="done"><span class="dot">3</span><span class="step-name"><span data-lang-only="en">Plan</span><span data-lang-only="de">Plan</span></span></a></li>
+    <li><a href="step-4-review-plan.html" class="done"><span class="dot">4</span><span class="step-name"><span data-lang-only="en">Review plan</span><span data-lang-only="de">Plan-Review</span></span></a></li>
+    <li><a href="step-5-implement-test.html" class="done"><span class="dot">5</span><span class="step-name"><span data-lang-only="en">Implement &amp; test</span><span data-lang-only="de">Umsetzung &amp; Tests</span></span></a></li>
+    <li><a href="step-6-review-implementation.html" aria-current="step"><span class="dot">6</span><span class="step-name"><span data-lang-only="en">Review code</span><span data-lang-only="de">Code-Review</span></span></a></li>
+    <li><a href="step-7-complete.html"><span class="dot">7</span><span class="step-name"><span data-lang-only="en">Complete</span><span data-lang-only="de">Abschluss</span></span></a></li>
   </ol>
 </div>
 
-<main class="wrap">
+<main class="wrap" data-lang-only="en">
   <section class="hero">
     <span class="eyebrow">Step 6 of 7 · second quality gate</span>
     <h1>Review and Approve Again</h1>
@@ -138,10 +139,119 @@
   </nav>
 </main>
 
+<main class="wrap" data-lang-only="de" lang="de">
+  <section class="hero">
+    <span class="eyebrow">Schritt 6 von 7 · zweites Qualitätstor</span>
+    <h1>Erneutes Review und Freigabe</h1>
+    <p class="lead">Grüne Tests zeigen nur, dass der Code tut, was die Tests prüfen. Ein Top-Modell prüft den Code gegen die Spezifikationen, und Anna probiert jedes Akzeptanzkriterium im Browser aus. Erst dann gibt sie frei.</p>
+    <div class="badges"><span class="badge">Mensch + KI</span><span class="badge model">Reviewer: Opus 5.5</span><span class="badge model">Ergebnis: Korrekturen + Freigabe</span></div>
+  </section>
+
+  <section>
+    <h2>6a · Der Review-Prompt</h2>
+    <div class="term">
+      <div class="frame-head"><strong>Terminal</strong> · claude --model opus · neue Sitzung</div>
+<pre><span class="cmd">&gt;</span> Prüfe die nicht committeten Änderungen (git diff) gegen GitHub-Issue #1,
+  TECH-SPEC.md und docs/user-story-plan/001-manage-prompts.md.
+  Suche nach: Fehlern, Sicherheitsproblemen, Verstößen gegen TECH-SPEC.md,
+  nicht erfüllten ACs und abgeschwächten Tests.
+  Gib jedem Befund eine ID (F-x), eine Schwere und eine Lösung. Ändere nichts.</pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>6b · Befunde und Entscheidungen</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>ID</th><th>Befund</th><th>Schwere</th><th>Entscheidung</th></tr></thead>
+        <tbody>
+          <tr><td><strong>F-1</strong></td><td><strong>XSS.</strong> <code>app.js</code> baut den Kopf eines Listeneintrags mit <code>innerHTML</code> und setzt den Titel ein. Ein Prompt mit dem Titel <code>&lt;img src=x onerror=alert(1)&gt;</code> führt Skript aus. Verstößt gegen BR-4 und TECH-SPEC §3. Lösung: Elemente mit <code>createElement</code> + <code>textContent</code> bauen.</td><td><span class="sev high">hoch</span></td><td><span class="dec yes">Beheben</span></td></tr>
+          <tr><td><strong>F-2</strong></td><td>Kopieren: Wenn <code>navigator.clipboard.writeText</code> scheitert (keine Berechtigung, unsicherer Kontext), wird das Promise still abgelehnt und der Nutzer sieht nichts. Verstößt gegen AC-8. Lösung: <code>try/catch</code> mit Meldung.</td><td><span class="sev med">mittel</span></td><td><span class="dec yes">Beheben</span></td></tr>
+          <tr><td><strong>F-3</strong></td><td>Lösche den Prompt, der gerade im Bearbeitungsformular offen ist, und klicke auf „Save changes“: Es erscheint „Prompt not found.“ Lösung: den Bearbeitungsmodus verlassen, wenn dieser Prompt gelöscht wird.</td><td><span class="sev med">mittel</span></td><td><span class="dec yes">Beheben</span></td></tr>
+          <tr><td><strong>F-4</strong></td><td><code>confirm()</code> durch einen eigenen modalen Dialog ersetzen, weil es schöner aussieht.</td><td><span class="sev low">niedrig</span></td><td><span class="dec no">Ablehnen</span>: AC-5 ist erfüllt. KISS.</td></tr>
+          <tr><td><strong>F-5</strong></td><td>Die Teständerung aus Schritt 5 geprüft (<code>"writ"</code> → <code>"writing"</code>). Der Test prüft weiterhin die Tag-Suche und ist nicht schwächer.</td><td><span class="sev low">Info</span></td><td><span class="dec yes">OK</span></td></tr>
+          <tr><td><strong>F-6</strong></td><td><strong>Von Anna gefunden</strong> bei der manuellen Prüfung (6d), nicht vom Reviewer. Direkt von der Festplatte geöffnet (<code>file://</code>), bleibt die Seite leer: keine Liste und kein Hinweis „No prompts yet“ – AC-2 ist nicht erfüllt. Browser blockieren <code>&lt;script type="module"&gt;</code> unter <code>file://</code>. Lösung: <code>prompt-store.js</code> und <code>app.js</code> als klassische Skripte laden; der Store stellt ein globales Objekt bereit, <code>PromptStore</code>.</td><td><span class="sev high">hoch</span></td><td><span class="dec yes">Beheben</span></td></tr>
+          <tr><td><strong>F-7</strong></td><td><strong>Von der KI gefunden</strong>, als sie einen Regressionstest für AC-2 schrieb. Zwei in derselben Millisekunde gespeicherte Prompts haben dasselbe <code>updatedAt</code>, und die Sortierung lässt sie in der Reihenfolge „älteste zuerst“. Lösung: Ein bearbeiteter Prompt rückt ans Ende der Liste, und bei gleichen Zeitstempeln entscheidet die Position in der Liste. Zwei neue Tests.</td><td><span class="sev med">mittel</span></td><td><span class="dec yes">Beheben</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout">
+      <p><strong>Warum die Tests F-1 nicht gefunden haben.</strong> Die Unit-Tests decken <code>prompt-store.js</code> ab, der Fehler lag im UI-Code. Schritt 1 hat BR-4 festgehalten, Schritt 2 hat daraus einen Entwicklungsstandard gemacht – so hatte der Reviewer eine klare Regel zum Prüfen. Nur was in der Spezifikation steht, wird abgesichert.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>6c · Die Korrektur für F-1</h2>
+    <p class="sub">Sonnet 5.5 behebt F-1 bis F-3, nach der manuellen Prüfung auch F-6 und F-7. Danach laufen die Tests erneut (16/16 grün, zwei davon neu für F-7).</p>
+    <div class="frame">
+      <div class="frame-head"><strong>app/app.js</strong> · Diff</div>
+<pre class="diff">    const li = el('li');
+<span class="del">-   li.innerHTML = `
+-     &lt;div class="item-head"&gt;
+-       &lt;h2&gt;${p.title}&lt;/h2&gt;
+-       &lt;span class="meta"&gt;Updated ${new Date(p.updatedAt).toLocaleString()}&lt;/span&gt;
+-     &lt;/div&gt;
+-     &lt;div class="tags"&gt;${p.tags.map((t) =&gt; `&lt;span class="tag"&gt;${t}&lt;/span&gt;`).join('')}&lt;/div&gt;`;</span><span class="add">+   const head = el('div', 'item-head');
++   head.append(el('h2', '', p.title), el('span', 'meta', `Updated ${new Date(p.updatedAt).toLocaleString()}`));
++   const tags = el('div', 'tags');
++   tags.append(...p.tags.map((t) =&gt; el('span', 'tag', t)));</span></pre>
+    </div>
+    <p>Die Hilfsfunktion <code>el(tag, className, text)</code> setzt immer <code>textContent</code> – Nutzerdaten können so nicht als HTML gelesen werden.</p>
+  </section>
+
+  <section>
+    <h2>6d · Annas manuelle Abnahme</h2>
+    <p class="sub">Anna öffnet die App und geht das Issue Zeile für Zeile durch. Du kannst das auch: <a href="app/index.html">App öffnen</a>.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>ID</th><th>Was Anna getan hat</th><th>Ergebnis</th></tr></thead>
+        <tbody>
+          <tr><td>AC-1</td><td>„Code review“ mit den Tags <code>Review, java</code> angelegt</td><td>✅ erscheint oben, Tags als <code>review</code> <code>java</code>, Formular ist leer</td></tr>
+          <tr><td>AC-2</td><td>App ohne Daten geöffnet, dann mit 3 Prompts. Erster Versuch: Doppelklick auf <code>index.html</code> im Finder</td><td>❌ erster Versuch: leere Seite, kein Hinweis (→ F-6)<br>✅ nach der Korrektur: Hinweis, dann neueste Änderung zuerst – von der Festplatte und vom Webserver</td></tr>
+          <tr><td>AC-3</td><td>Nach „JAVA“, „junit“, „summ“ gesucht</td><td>✅ trifft Tag, Text und Titel</td></tr>
+          <tr><td>AC-4</td><td>Den ältesten Prompt bearbeitet, Titel behalten</td><td>✅ gespeichert, rückt nach oben (R-1)</td></tr>
+          <tr><td>AC-5</td><td>Auf Delete geklickt, dann Abbrechen; dann Delete, dann OK</td><td>✅ erst behalten, dann entfernt</td></tr>
+          <tr><td>AC-6</td><td>Auf Copy geklickt, in Claude Code eingefügt</td><td>✅ Text eingefügt, Bestätigung angezeigt</td></tr>
+          <tr><td>AC-7</td><td>Neu geladen, dann den Browser geschlossen und wieder geöffnet</td><td>✅ Prompts noch da</td></tr>
+          <tr><td>AC-8</td><td>Mit leerem Titel gespeichert; doppelter Titel; Tag <code>c++</code></td><td>✅ klare Meldungen, nichts gespeichert</td></tr>
+          <tr><td>BR-4</td><td>Prompt mit dem Titel <code>&lt;img src=x onerror=alert(1)&gt;</code> angelegt</td><td>✅ als Text angezeigt, kein Skript läuft (F-1)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout warn">
+      <p><strong>Der Mensch fand, was beide LLMs übersehen hatten.</strong> Alle Unit-Tests waren grün und das Code-Review war erledigt – trotzdem startete die App nicht so, wie Anna sie öffnete. Die Reviewer haben nur den Code gelesen; niemand hatte ihn auf diese Weise im Browser geöffnet. Deshalb endet Schritt 6 mit einem Menschen, der jedes Akzeptanzkriterium ausprobiert, und nicht mit einem grünen Testlauf.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>6e · Freigabe durch den Menschen</h2>
+    <div class="frame">
+      <div class="frame-head"><strong>Anna</strong> hat Issue #1 kommentiert</div>
+      <div class="frame-body">
+        <p>✅ <strong>Implementierung freigegeben.</strong> Code-Review durch Opus 5.5: F-1..F-3 behoben, F-4 abgelehnt (KISS). Manuelle Prüfung: F-6 (leere Seite unter <code>file://</code>) und F-7 (Sortierung bei gleichen Zeitstempeln) behoben. 16/16 Unit-Tests grün. AC-1..AC-8 und BR-4 von Hand geprüft in Chrome und Firefox, von der Festplatte und vom Webserver, im hellen und dunklen Modus und in Handy-Breite.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Fertig, wenn …</h2>
+    <ul>
+      <li>ein Top-Modell den Code gegen die Spezifikationen geprüft hat, nicht nur den Stil.</li>
+      <li>jeder Befund behoben oder mit Begründung abgelehnt ist und die Tests wieder grün sind.</li>
+      <li>ein Mensch jedes Akzeptanzkriterium geprüft und schriftlich freigegeben hat.</li>
+    </ul>
+  </section>
+
+  <nav class="pnav" aria-label="Schritt-Navigation">
+    <a href="step-5-implement-test.html"><small>← Zurück</small><strong>Schritt 5 · Implementierung und Tests</strong></a>
+    <a class="next" href="step-7-complete.html"><small>Weiter →</small><strong>Schritt 7 · Abschluss</strong></a>
+  </nav>
+</main>
+
 <footer>
   <div class="wrap">
-    <span>KissSDD by <a href="https://de.linkedin.com/in/dr-lofi-dewanto" target="_blank" rel="noopener">Dr. Lofi Dewanto</a></span>
-    <a href="../index.html">KissSDD homepage</a>
+    <span><span data-lang-only="en">KissSDD by</span><span data-lang-only="de">KissSDD von</span> <a href="https://de.linkedin.com/in/dr-lofi-dewanto" target="_blank" rel="noopener">Dr. Lofi Dewanto</a></span>
+    <a href="../index.html"><span data-lang-only="en">KissSDD homepage</span><span data-lang-only="de">KissSDD-Startseite</span></a>
   </div>
 </footer>
 </body>

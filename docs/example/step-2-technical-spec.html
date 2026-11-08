@@ -3,33 +3,34 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Step 2 · Technical Specifications – KissSDD Example</title>
+<title data-de="Schritt 2 · Technische Spezifikationen – KissSDD-Beispiel">Step 2 · Technical Specifications – KissSDD Example</title>
 <meta name="description" content="KissSDD example, step 2: write the global technical specification for the prompt manager web app.">
 <link rel="icon" href="../favicon.ico" sizes="any">
 <link rel="icon" href="../img/icons/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="example.css">
+<script src="example.js"></script>
 </head>
 <body>
 <header class="top">
   <div class="wrap">
-    <a class="brand" href="index.html"><img src="../img/icons/favicon.svg" alt="" width="26" height="26"><b>Kiss<span>SDD</span></b> <small>Example</small></a>
-    <nav><a href="index.html">Overview</a></nav>
+    <a class="brand" href="index.html"><img src="../img/icons/favicon.svg" alt="" width="26" height="26"><b>Kiss<span>SDD</span></b> <small><span data-lang-only="en">Example</span><span data-lang-only="de">Beispiel</span></small></a>
+    <nav class="tools"><a href="index.html"><span data-lang-only="en">Overview</span><span data-lang-only="de">Übersicht</span></a><div class="lang" role="group" aria-label="Language"><button type="button" data-set-lang="en" aria-pressed="true">EN</button><button type="button" data-set-lang="de" aria-pressed="false">DE</button></div></nav>
   </div>
 </header>
 
 <div class="wrap">
   <ol class="stepper" aria-label="Steps">
-    <li><a href="step-1-functional-spec.html" class="done"><span class="dot">1</span><span class="step-name">Functional spec</span></a></li>
-    <li><a href="step-2-technical-spec.html" aria-current="step"><span class="dot">2</span><span class="step-name">Technical spec</span></a></li>
-    <li><a href="step-3-implementation-plan.html"><span class="dot">3</span><span class="step-name">Plan</span></a></li>
-    <li><a href="step-4-review-plan.html"><span class="dot">4</span><span class="step-name">Review plan</span></a></li>
-    <li><a href="step-5-implement-test.html"><span class="dot">5</span><span class="step-name">Implement &amp; test</span></a></li>
-    <li><a href="step-6-review-implementation.html"><span class="dot">6</span><span class="step-name">Review code</span></a></li>
-    <li><a href="step-7-complete.html"><span class="dot">7</span><span class="step-name">Complete</span></a></li>
+    <li><a href="step-1-functional-spec.html" class="done"><span class="dot">1</span><span class="step-name"><span data-lang-only="en">Functional spec</span><span data-lang-only="de">Funktionale Spez.</span></span></a></li>
+    <li><a href="step-2-technical-spec.html" aria-current="step"><span class="dot">2</span><span class="step-name"><span data-lang-only="en">Technical spec</span><span data-lang-only="de">Technische Spez.</span></span></a></li>
+    <li><a href="step-3-implementation-plan.html"><span class="dot">3</span><span class="step-name"><span data-lang-only="en">Plan</span><span data-lang-only="de">Plan</span></span></a></li>
+    <li><a href="step-4-review-plan.html"><span class="dot">4</span><span class="step-name"><span data-lang-only="en">Review plan</span><span data-lang-only="de">Plan-Review</span></span></a></li>
+    <li><a href="step-5-implement-test.html"><span class="dot">5</span><span class="step-name"><span data-lang-only="en">Implement &amp; test</span><span data-lang-only="de">Umsetzung &amp; Tests</span></span></a></li>
+    <li><a href="step-6-review-implementation.html"><span class="dot">6</span><span class="step-name"><span data-lang-only="en">Review code</span><span data-lang-only="de">Code-Review</span></span></a></li>
+    <li><a href="step-7-complete.html"><span class="dot">7</span><span class="step-name"><span data-lang-only="en">Complete</span><span data-lang-only="de">Abschluss</span></span></a></li>
   </ol>
 </div>
 
-<main class="wrap">
+<main class="wrap" data-lang-only="en">
   <section class="hero">
     <span class="eyebrow">Step 2 of 7 · can run in parallel with step 1</span>
     <h1>Define Technical Specifications</h1>
@@ -131,10 +132,112 @@ app/
   </nav>
 </main>
 
+<main class="wrap" data-lang-only="de" lang="de">
+  <section class="hero">
+    <span class="eyebrow">Schritt 2 von 7 · kann parallel zu Schritt 1 laufen</span>
+    <h1>Technische Spezifikationen</h1>
+    <p class="lead">Die funktionale Spezifikation sagt, <em>was</em>. Die technische Spezifikation sagt, <em>womit</em> und <em>nach welchen Regeln</em>. Sie ist global: einmal für das Projekt geschrieben und von jeder User Story wiederverwendet.</p>
+    <div class="badges"><span class="badge">Mensch + KI</span><span class="badge model">Modell: Opus 5.5</span><span class="badge model">Ergebnis: TECH-SPEC.md</span></div>
+  </section>
+
+  <section>
+    <h2>2a · Den Stack festlegen</h2>
+    <p class="sub">Annas Kollege Ben verantwortet die technische Seite. Er lässt sich von der KI Optionen zeigen und entscheidet dann selbst.</p>
+    <div class="frame">
+      <div class="frame-head"><strong>Claude Code</strong> · Opus 5.5</div>
+      <div class="chat">
+        <div class="msg human"><span class="who">Ben</span>
+          <p>Wir wollen eine kleine Web-App zur Verwaltung von Prompts. Ein Nutzer, die Daten bleiben im Browser, gehostet auf GitHub Pages. Schlag einen Stack vor. So einfach wie möglich, mit Vor- und Nachteilen. Schreib keinen Code.</p>
+        </div>
+        <div class="msg ai"><span class="who">KI</span>
+          <p>Drei Optionen:</p>
+          <ol>
+            <li><strong>Reines HTML + CSS + JavaScript (ES-Module), localStorage.</strong> Kein Build, keine Abhängigkeiten, läuft auf jedem statischen Host. Nachteil: Den DOM-Code schreibst du selbst.</li>
+            <li><strong>Vue 3 über CDN.</strong> Schönere Templates, immer noch kein Build. Nachteil: eine externe Abhängigkeit, die aktuell gehalten werden muss.</li>
+            <li><strong>Spring Boot + Thymeleaf + Datenbank.</strong> Nötig für mehrere Nutzer. Für diesen Umfang klar zu viel, und GitHub Pages kann es nicht ausführen.</li>
+          </ol>
+          <p>Für einen Nutzer und eine Ansicht ist Option 1 am einfachsten. Für Tests reicht der eingebaute Test-Runner von Node – du brauchst auch kein Test-Framework.</p>
+        </div>
+        <div class="msg human"><span class="who">Ben</span>
+          <p>Option 1. Schreib TECH-SPEC.md. Nimm unsere Entwicklungsstandards auf: Fachlogik getrennt vom DOM, und Nutzerdaten nie über innerHTML.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>2b · Das Ergebnis: <code>TECH-SPEC.md</code></h2>
+    <p class="sub">Liegt im Wurzelverzeichnis des Repositorys, damit Menschen und der KI-Agent sie für jede Story lesen können. In einem Java-Team stünden hier Java, Spring Boot, Angular usw. Der Rest des Prozesses bleibt gleich. Die Datei ist – wie im echten Projekt – auf Englisch.</p>
+    <div class="frame">
+      <div class="frame-head"><strong>TECH-SPEC.md</strong></div>
+      <pre># Technical Specification – Prompt Manager
+
+## 1. Stack
+- HTML5, CSS3, JavaScript (ES2022, ES modules). No framework.
+- No build step, no bundler, no runtime dependencies.
+- Persistence: browser localStorage (see data model in the user story).
+- Hosting: any static web server, e.g. GitHub Pages.
+- Supported browsers: current Chrome, Firefox, Safari, Edge.
+
+## 2. Architecture
+app/
+  index.html          markup only
+  app.js              UI: reads the DOM, calls the store, renders
+  prompt-store.js     domain logic: validation, create, update, delete,
+                      search, sort, load, save. NO DOM access.
+  prompt-store.test.js unit tests for prompt-store.js
+
+- Functions in prompt-store.js are pure where possible: they take the
+  current list and return a new list. No hidden global state.
+- Storage is passed in as a parameter, so tests can use a fake storage.
+- Errors from validation are returned as a list of messages, not thrown.
+
+## 3. Coding standards
+- User data is written to the page ONLY with textContent or
+  createElement. Never innerHTML, outerHTML or insertAdjacentHTML.
+- Small functions, clear names, no abbreviations.
+- Comments explain "why", not "what".
+- Accessible: every input has a label, status messages use aria-live.
+- Works in light and dark mode (prefers-color-scheme) and at 360px width.
+
+## 4. Testing
+- Node.js 20+ built-in test runner: `npm test` (node --test).
+- Every acceptance criterion (AC-x) and business rule (BR-x) that can
+  be checked without a browser has at least one unit test.
+  The test name starts with its ID, e.g. "AC-3: …".
+- Manual check of all ACs in the browser before approval (step 6).
+
+## 5. Constraints – what must not change
+- No new dependencies without approval.
+- The storage key format "kisssdd.prompts.v&lt;n&gt;" stays; a new
+  version needs a migration.
+- Tests that were approved in an earlier story are not changed to make
+  new code pass.</pre>
+    </div>
+    <div class="callout">
+      <p><strong>Tipp aus der Community:</strong> Schreib Grenzen und Dinge, die sich nicht ändern dürfen, in die Spezifikation. Die KI hält sich an das, was geschrieben steht – nicht an das, was du nur im Kopf hattest.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Fertig, wenn …</h2>
+    <ul>
+      <li>Stack, Architektur, Entwicklungsstandards und Testregeln festgehalten sind.</li>
+      <li>Rahmenbedingungen und „darf sich nicht ändern“-Regeln explizit sind.</li>
+      <li>die Datei im Repository liegt, wo der KI-Agent sie lesen kann.</li>
+    </ul>
+  </section>
+
+  <nav class="pnav" aria-label="Schritt-Navigation">
+    <a href="step-1-functional-spec.html"><small>← Zurück</small><strong>Schritt 1 · Funktionale Spezifikationen</strong></a>
+    <a class="next" href="step-3-implementation-plan.html"><small>Weiter →</small><strong>Schritt 3 · Implementierungsplan</strong></a>
+  </nav>
+</main>
+
 <footer>
   <div class="wrap">
-    <span>KissSDD by <a href="https://de.linkedin.com/in/dr-lofi-dewanto" target="_blank" rel="noopener">Dr. Lofi Dewanto</a></span>
-    <a href="../index.html">KissSDD homepage</a>
+    <span><span data-lang-only="en">KissSDD by</span><span data-lang-only="de">KissSDD von</span> <a href="https://de.linkedin.com/in/dr-lofi-dewanto" target="_blank" rel="noopener">Dr. Lofi Dewanto</a></span>
+    <a href="../index.html"><span data-lang-only="en">KissSDD homepage</span><span data-lang-only="de">KissSDD-Startseite</span></a>
   </div>
 </footer>
 </body>

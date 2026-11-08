@@ -3,22 +3,23 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>KissSDD Example – Prompt Manager</title>
+<title data-de="KissSDD-Beispiel – Prompt-Manager">KissSDD Example – Prompt Manager</title>
 <meta name="description" content="A complete KissSDD walkthrough: building a simple web app for managing prompts, from User Story to closed GitHub Issue, in seven steps.">
 <meta name="theme-color" content="#0f3f86">
 <link rel="icon" href="../favicon.ico" sizes="any">
 <link rel="icon" href="../img/icons/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="example.css">
+<script src="example.js"></script>
 </head>
 <body>
 <header class="top">
   <div class="wrap">
-    <a class="brand" href="../index.html"><img src="../img/icons/favicon.svg" alt="" width="26" height="26"><b>Kiss<span>SDD</span></b> <small>Example</small></a>
-    <nav><a href="../index.html">← Back to KissSDD</a></nav>
+    <a class="brand" href="../index.html"><img src="../img/icons/favicon.svg" alt="" width="26" height="26"><b>Kiss<span>SDD</span></b> <small><span data-lang-only="en">Example</span><span data-lang-only="de">Beispiel</span></small></a>
+    <nav class="tools"><a href="../index.html"><span data-lang-only="en">← Back to KissSDD</span><span data-lang-only="de">← Zurück zu KissSDD</span></a><div class="lang" role="group" aria-label="Language"><button type="button" data-set-lang="en" aria-pressed="true">EN</button><button type="button" data-set-lang="de" aria-pressed="false">DE</button></div></nav>
   </div>
 </header>
 
-<main class="wrap">
+<main class="wrap" data-lang-only="en">
   <section class="hero">
     <span class="eyebrow">Step-by-step example</span>
     <h1>Create a simple web app for managing prompts</h1>
@@ -69,10 +70,62 @@
   </section>
 </main>
 
+<main class="wrap" data-lang-only="de" lang="de">
+  <section class="hero">
+    <span class="eyebrow">Beispiel Schritt für Schritt</span>
+    <h1>Erstelle eine einfache Web-App zur Verwaltung von Prompts</h1>
+    <p class="lead">Ein kleines Feature, durch alle sieben KissSDD-Schritte – von der ersten User Story bis zum geschlossenen GitHub-Issue. Jeder Schritt zeigt, was der Mensch schreibt, was die KI erzeugt und was im Repository landet.</p>
+    <div class="cta">
+      <a class="btn primary" href="step-1-functional-spec.html">Mit Schritt 1 starten →</a>
+      <a class="btn ghost" href="app/index.html">Fertige App ausprobieren</a>
+    </div>
+  </section>
+
+  <section>
+    <h2>Das Szenario</h2>
+    <p>Anna ist Entwicklerin. Sie arbeitet jeden Tag mit Claude Code und sammelt ihre besten Prompts in verstreuten Textdateien. Sie möchte eine kleine Web-App, um sie zu <strong>speichern, finden, bearbeiten und kopieren</strong>. Das Team arbeitet nach KissSDD: kein Framework, nur ein GitHub-Issue, eine technische Spezifikation, ein KI-Agent – und ein Mensch, der freigibt.</p>
+    <div class="callout">
+      <p><strong>Bewusst KISS.</strong> Das Beispiel nutzt reines HTML, CSS und JavaScript mit Browser-Speicher. Kein Backend, kein Build-Schritt – du kannst jede Datei lesen und das Ergebnis direkt hier ausführen. Der Prozess bleibt für Java, Spring Boot, Angular, Vue oder jeden anderen Stack gleich. Nur die technische Spezifikation in Schritt 2 ändert sich.</p>
+    </div>
+    <p class="sub">Hinweis: Dateien im Repository (TECH-SPEC.md, Plan, Code) und Terminal-Ausgaben bleiben auf Englisch – so wie in einem echten Projekt.</p>
+  </section>
+
+  <section>
+    <h2>Die sieben Schritte</h2>
+    <p class="sub">Jede Karte öffnet einen Schritt. Die letzte Zeile jeder Karte nennt, was dieser Schritt hinterlässt.</p>
+    <ol class="cards">
+      <li><a href="step-1-functional-spec.html"><span class="num">1</span><h3>Funktionale Spezifikationen</h3><p>Anna schreibt die User Story. Opus 5.5 zeigt ihr, was sie übersehen hat.</p><span class="out">→ GitHub-Issue #1</span></a></li>
+      <li><a href="step-2-technical-spec.html"><span class="num">2</span><h3>Technische Spezifikationen</h3><p>Stack, Architektur, Entwicklungsstandards und Grenzen – für alle Stories.</p><span class="out">→ TECH-SPEC.md</span></a></li>
+      <li><a href="step-3-implementation-plan.html"><span class="num">3</span><h3>Implementierungsplan generieren</h3><p>Claude Code liest Issue und Spezifikation und schreibt einen konkreten Plan.</p><span class="out">→ docs/user-story-plan/001-manage-prompts.md</span></a></li>
+      <li><a href="step-4-review-plan.html"><span class="num">4</span><h3>Review und Freigabe</h3><p>Ein zweites LLM prüft den Plan. Anna entscheidet über jeden Befund.</p><span class="out">→ Plan v2, freigegeben</span></a></li>
+      <li><a href="step-5-implement-test.html"><span class="num">5</span><h3>Implementierung und Tests</h3><p>Die KI schreibt Code und Tests, führt sie aus und analysiert einen Fehlschlag.</p><span class="out">→ app/ + 14 grüne Tests</span></a></li>
+      <li><a href="step-6-review-implementation.html"><span class="num">6</span><h3>Erneutes Review und Freigabe</h3><p>Ein Code-Review findet eine Sicherheitslücke. Annas manuelle Prüfung findet einen Fehler, den beide LLMs übersehen haben.</p><span class="out">→ Korrekturen + Freigabe</span></a></li>
+      <li><a href="step-7-complete.html"><span class="num">7</span><h3>Abschluss</h3><p>Commit, Push, Issue schließen – dann beginnt die nächste Iteration.</p><span class="out">→ Issue #1 geschlossen</span></a></li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Dateien dieses Beispiels</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Datei</th><th>Erstellt in</th><th>Was es ist</th></tr></thead>
+        <tbody>
+          <tr><td>GitHub-Issue #1</td><td>Schritt 1</td><td>User Story, Akzeptanzkriterien, Geschäftsregeln, Entitäts- und Datenmodell</td></tr>
+          <tr><td><code>TECH-SPEC.md</code></td><td>Schritt 2</td><td>Globale technische Spezifikation</td></tr>
+          <tr><td><code>docs/user-story-plan/001-manage-prompts.md</code></td><td>Schritte 3 + 4</td><td>Implementierungsplan, nach dem Review aktualisiert</td></tr>
+          <tr><td><a href="app/prompt-store.js"><code>app/prompt-store.js</code></a></td><td>Schritt 5</td><td>Fachlogik und Validierung (ohne DOM)</td></tr>
+          <tr><td><a href="app/app.js"><code>app/app.js</code></a>, <a href="app/index.html"><code>app/index.html</code></a></td><td>Schritte 5 + 6</td><td>Benutzeroberfläche</td></tr>
+          <tr><td><a href="app/prompt-store.test.js"><code>app/prompt-store.test.js</code></a></td><td>Schritte 5 + 6</td><td>16 Unit-Tests, ausführen mit <code>npm test</code> (Node 20+)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
 <footer>
   <div class="wrap">
-    <span>KissSDD by <a href="https://de.linkedin.com/in/dr-lofi-dewanto" target="_blank" rel="noopener">Dr. Lofi Dewanto</a></span>
-    <a href="../index.html">KissSDD homepage</a>
+    <span><span data-lang-only="en">KissSDD by</span><span data-lang-only="de">KissSDD von</span> <a href="https://de.linkedin.com/in/dr-lofi-dewanto" target="_blank" rel="noopener">Dr. Lofi Dewanto</a></span>
+    <a href="../index.html"><span data-lang-only="en">KissSDD homepage</span><span data-lang-only="de">KissSDD-Startseite</span></a>
   </div>
 </footer>
 </body>
