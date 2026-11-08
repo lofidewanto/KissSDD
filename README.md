@@ -15,7 +15,7 @@ This repository holds the homepage for **KissSDD**, a simple approach to Specifi
 There are many SDD frameworks (AI Unified Process, GitHub Spec Kit, OpenSpec, BMAD, Get Shit Done …). If you are new to SDD, don't start with one of them. Start simple:
 
 1. **Define Functional Specifications** (Human + AI): a User Story with acceptance criteria in a GitHub Issue.
-2. **Define Technical Specifications** (Human + AI): global specs such as the stack (e.g. Java, Spring Boot, Angular, Vue, Vaadin, Thymeleaf, HTML, JS), architecture and coding standards. *Can be done in parallel with step 1.*
+2. **Define Technical Specifications** (Human + AI): global specs such as the stack (e.g. Java, Spring Boot, Angular, Vue, Vaadin, GWT, DominoUI, WebFX, Thymeleaf, HTML, JS), architecture and coding standards. *Can be done in parallel with step 1.*
 3. **Generate Implementation Plan** (AI): saved in `docs/user-story-plan/…`.
 4. **Review and Approve** (Human + AI): one or more LLMs review, a human approves.
 5. **Implement and Test** (AI)
