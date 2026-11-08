@@ -83,6 +83,15 @@
   nav.links { display: flex; gap: 20px; font-size: 15px; }
   nav.links a { color: var(--muted); text-decoration: none; }
   nav.links a:hover { color: var(--text); }
+  .head-right { display: flex; align-items: center; gap: 10px; }
+  .menu-btn {
+    display: none; align-items: center; justify-content: center; width: 40px; height: 40px;
+    border: 1px solid var(--line); border-radius: 10px; background: var(--card); color: var(--text); cursor: pointer; padding: 0;
+  }
+  .menu-btn svg { width: 22px; height: 22px; }
+  .menu-btn .i-close { display: none; }
+  header.top.open .menu-btn .i-open { display: none; }
+  header.top.open .menu-btn .i-close { display: block; }
   .lang { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; background: var(--card); }
   .lang button {
     border: 0; background: transparent; color: var(--muted); font: inherit; font-size: 14px; font-weight: 600;
@@ -173,7 +182,16 @@
   html[lang="en"] [data-lang-only="en"], html[lang="de"] [data-lang-only="de"] { display: revert; }
 
   @media (max-width: 860px) {
-    nav.links { display: none; }
+    header.top .wrap { position: relative; }
+    .menu-btn { display: inline-flex; }
+    nav.links {
+      display: none; position: absolute; top: 60px; left: 0; right: 0;
+      flex-direction: column; gap: 0; padding: 8px 16px 16px;
+      background: var(--bg); border-bottom: 1px solid var(--line); box-shadow: 0 12px 24px rgba(0,0,0,.08);
+    }
+    header.top.open nav.links { display: flex; }
+    nav.links a { padding: 12px 0; font-size: 17px; border-bottom: 1px solid var(--line); }
+    nav.links a:last-child { border-bottom: 0; }
     .why, .next, .example { grid-template-columns: 1fr; }
     .pillars, .models { grid-template-columns: 1fr 1fr; }
   }
@@ -188,7 +206,7 @@
 <header class="top">
   <div class="wrap">
     <a class="brand" href="#"><img src="img/icons/favicon.svg" alt="" width="28" height="28"><b>Kiss<span>SDD</span></b></a>
-    <nav class="links">
+    <nav class="links" id="site-nav">
       <a href="#why" data-i18n="nav.why">Why KISS</a>
       <a href="#process" data-i18n="nav.process">Process</a>
       <a href="#steps" data-i18n="nav.steps">7 Steps</a>
@@ -196,9 +214,15 @@
       <a href="#models" data-i18n="nav.models">Models</a>
       <a href="#next" data-i18n="nav.next">Next Steps</a>
     </nav>
-    <div class="lang" role="group" aria-label="Language">
-      <button type="button" data-set-lang="en" aria-pressed="true">EN</button>
-      <button type="button" data-set-lang="de" aria-pressed="false">DE</button>
+    <div class="head-right">
+      <div class="lang" role="group" aria-label="Language">
+        <button type="button" data-set-lang="en" aria-pressed="true">EN</button>
+        <button type="button" data-set-lang="de" aria-pressed="false">DE</button>
+      </div>
+      <button type="button" class="menu-btn" id="menu-btn" aria-expanded="false" aria-controls="site-nav" aria-label="Menu">
+        <svg class="i-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        <svg class="i-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
     </div>
   </div>
 </header>
@@ -537,6 +561,7 @@
     document.getElementById("info-link").href = src;
     document.querySelectorAll("[data-set-lang]").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.setLang === lang)); });
     document.title = titles[lang];
+    document.getElementById("menu-btn").setAttribute("aria-label", lang === "de" ? "Menü" : "Menu");
     try { localStorage.setItem("sddkiss-lang", lang); } catch (e) {}
   }
 
@@ -548,6 +573,18 @@
       history.replaceState(null, "", url.pathname + url.search + url.hash);
     } catch (e) {}
   }
+
+  // Mobile header menu: toggle, close on link click, Escape or click outside.
+  var header = document.querySelector("header.top");
+  var menuBtn = document.getElementById("menu-btn");
+  function setMenu(open) {
+    header.classList.toggle("open", open);
+    menuBtn.setAttribute("aria-expanded", String(open));
+  }
+  menuBtn.addEventListener("click", function () { setMenu(!header.classList.contains("open")); });
+  document.querySelectorAll("#site-nav a").forEach(function (a) { a.addEventListener("click", function () { setMenu(false); }); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && header.classList.contains("open")) { setMenu(false); menuBtn.focus(); } });
+  document.addEventListener("click", function (e) { if (!header.contains(e.target)) setMenu(false); });
 
   document.querySelectorAll("[data-set-lang]").forEach(function (b) {
     b.addEventListener("click", function () { setLang(b.dataset.setLang); setUrlLang(b.dataset.setLang); });
